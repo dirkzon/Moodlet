@@ -5,21 +5,25 @@ class Session {
   bool valid = false;
   List<Entry> entries = [];
 
-  Session? decode(List<int> bArr) {
+  Session(this.date, this.valid, this.entries);
+
+  static Session? decode(List<int> bArr) {
+    bool valid = false;
     if (bArr.length < 8) {
       return null;
     }
-    Session session = Session();
     if ((bArr[0] & 255) == 252) {
       valid = true;
     }
 
+    List<Entry> entries = [];
     for (int i = 8; i <= bArr.length - 4; i += 4) {
       var mm = (bArr[i + 1] & 255);
-      if (mm < 100) {
+      if (mm > 100) {
         valid = false;
       }
-      Entry((bArr[i] & 255), mm, (bArr[i + 2] & 255), (bArr[i + 3] & 255));
+      entries.add(
+          Entry((bArr[i] & 255), mm, (bArr[i + 2] & 255), (bArr[i + 3] & 255)));
     }
 
     int epoch = (((((bArr[5] & 255) << 0x10) |
@@ -31,7 +35,8 @@ class Session {
                 ((bArr[3] & 255) << 8) |
                 (bArr[4] & 255))) *
         1000;
-    date = DateTime.fromMicrosecondsSinceEpoch(epoch * 1000);
-    return session;
+    DateTime date = DateTime.fromMicrosecondsSinceEpoch(epoch * 1000);
+
+    return Session(date, valid, entries);
   }
 }

@@ -212,10 +212,6 @@ class DeviceScreen extends StatelessWidget {
     await dateTimeCharacteristic.write(timeArr);
   }
 
-  Future<void> _removeRingFlash() async {
-    await commandModeCharacteristic.write([2, ((0 >> 8) & 255), (0 & 255)]);
-  }
-
   List<int> _getRandomBytes() {
     final math = Random();
     return [
@@ -256,7 +252,7 @@ class DeviceScreen extends StatelessWidget {
     await commandModeCharacteristic.write([1, ((0 >> 8) & 255), (0 & 255)]);
 
     // decode data buffer
-    Recording recording = Recording().decode(buffer);
+    Recording recording = Recording.decode(buffer);
     recording.aA = comboData.aA;
 
     // set reference time
@@ -264,7 +260,7 @@ class DeviceScreen extends StatelessWidget {
 
     // remove flash from ring
     if (!debug) {
-      await _removeRingFlash();
+      await commandModeCharacteristic.write([2, ((0 >> 8) & 255), (0 & 255)]);
     }
     print(recording);
   }
