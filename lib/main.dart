@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
+import 'package:bletest/recording/recording.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:bletest/widgets.dart';
+
+import 'recording/combodata.dart';
 
 const UUID_MOODMETRIC_SERVICE = "dd499b70-e4cd-4988-a923-a7aab7283f8e";
 const UUID_CHARACTERISTIC_COMMAND_MODE = "db321950-97c1-4767-b255-982fe3030b2b";
@@ -12,6 +14,11 @@ const UUID_CHARACTERISTIC_FLASH_STATE = "96e964d0-c86f-11e3-9c1a-0800200c9a66";
 const UUID_CHARACTERISTIC_DATA = "72741c00-a685-11e3-a5e2-0800200c9a66";
 const UUID_CHARACTERISTIC_DATETIME = "941f5032-9c7a-11e3-8d05-425861b86ab6";
 const UUID_CHARACTERISTIC_COMBO = "90bd4fd0-4309-11e4-916c-0800200c9a66";
+late BluetoothCharacteristic flashStateCharacteristic;
+late BluetoothCharacteristic commandModeCharacteristic;
+late BluetoothCharacteristic dataCharacterisitc;
+late BluetoothCharacteristic comboCharacteristic;
+late BluetoothCharacteristic dateTimeCharacteristic;
 const debug = true;
 
 void main() {
@@ -160,84 +167,22 @@ class FindDevicesScreen extends StatelessWidget {
   }
 }
 
-class Entry {
-  late int scrn;
-  late int mm;
-  late int scl;
-  late int steps;
-
-  Entry(this.scrn, this.mm, this.scl, this.steps);
-}
-
-class Session {
-  late DateTime date;
-  late bool valid;
-  List<Entry> entries = [];
-
-  Session(this.date, this.valid, this.entries);
-}
-
-class ComboData {
-  double aA = 0.0;
-  double gG = 0.0;
-  double mM = 0.0;
-  double xX = 0.0;
-  double yY = 0.0;
-  double zZ = 0.0;
-
-  ComboData(bArr) {
-    aA = (((bArr[4] & 255)) * 256) + ((bArr[5] & 255)).toDouble();
-    gG = (((bArr[0] & 255)) * 256) + ((bArr[1] & 255)).toDouble();
-    mM = (((bArr[2] & 255)) * 256) + ((bArr[3] & 255)).toDouble();
-    xX = (((((bArr[6] & 255)) * 256) + ((bArr[7] & 255)) - 32768) / 16384)
-        .toDouble();
-    yY = (((((bArr[8] & 255)) * 256) + ((bArr[9] & 255)) - 32768) / 16384)
-        .toDouble();
-    zZ = (((((bArr[10] & 255)) * 256) + ((bArr[11] & 255)) - 32768) / 16384)
-        .toDouble();
-  }
-}
-
 class DeviceScreen extends StatelessWidget {
   const DeviceScreen({Key? key, required this.device}) : super(key: key);
 
   final BluetoothDevice device;
 
-  List<int> _getRandomBytes() {
-    final math = Random();
-    return [
-      math.nextInt(255),
-      math.nextInt(255),
-      math.nextInt(255),
-      math.nextInt(255)
-    ];
-  }
-
-  Session? _createSession(List<int> bArr) {
-    if (bArr.length < 8) {
-      return null;
-    }
-    bool z = false;
-    if ((bArr[0] & 255) == 252) {
-      z = true;
-    }
-    int epoch = (((((bArr[5] & 255) << 0x10) |
-                    ((bArr[6] & 255) << 8) |
-                    (bArr[7] & 255)) *
-                60) +
-            (((bArr[1] & 255) << 0x18) |
-                ((bArr[2] & 255) << 0x10) |
-                ((bArr[3] & 255) << 8) |
-                (bArr[4] & 255))) *
-        1000;
-
-    List<Entry> entries = [];
-    for (int i = 8; i <= bArr.length - 4; i += 4) {
-      entries.add(Entry((bArr[i] & 255), (bArr[i + 1] & 255),
-          (bArr[i + 2] & 255), (bArr[i + 3] & 255)));
-    }
-    return Session(
-        DateTime.fromMicrosecondsSinceEpoch(epoch * 1000), z, entries);
+  void _pupulateCharacteristics(List<BluetoothService> services) {
+    flashStateCharacteristic =
+        _getCharacteristic(UUID_CHARACTERISTIC_FLASH_STATE, services)!;
+    commandModeCharacteristic =
+        _getCharacteristic(UUID_CHARACTERISTIC_COMMAND_MODE, services)!;
+    dataCharacterisitc =
+        _getCharacteristic(UUID_CHARACTERISTIC_DATA, services)!;
+    comboCharacteristic =
+        _getCharacteristic(UUID_CHARACTERISTIC_COMBO, services)!;
+    dateTimeCharacteristic =
+        _getCharacteristic(UUID_CHARACTERISTIC_DATETIME, services)!;
   }
 
   BluetoothCharacteristic? _getCharacteristic(
@@ -249,64 +194,14 @@ class DeviceScreen extends StatelessWidget {
         }
       }
     }
+    return null;
   }
 
-  Future<void> _downloadData(List<BluetoothService> services) async {
-    var buffer = <int>[];
-    List<Session> sessions = [];
+  Future<List<int>> _getFlashState() async {
+    return await flashStateCharacteristic.read();
+  }
 
-    //1 get flashstate
-    var flashState =
-        await _getCharacteristic(UUID_CHARACTERISTIC_FLASH_STATE, services)
-            ?.read();
-    int startAddress = 0;
-    int endAddress = (((flashState?[0])! & 255).toInt() << 8) |
-        (flashState![1] & 255).toInt();
-
-    //2
-    var commandMode =
-        _getCharacteristic(UUID_CHARACTERISTIC_COMMAND_MODE, services);
-
-    //3
-    await commandMode!.write([startAddress, ((0 >> 8) & 255), (0 & 255)]);
-    var dataCharacterisitc =
-        _getCharacteristic(UUID_CHARACTERISTIC_DATA, services);
-
-    // read MM data and add to buffer
-    while (startAddress < endAddress) {
-      var bArr = await dataCharacterisitc!.read();
-      print("current address: $startAddress");
-      buffer.addAll(bArr.getRange(2, 18));
-      startAddress += 16;
-    }
-
-    //read combo data
-    ComboData comboData = ComboData(
-        await _getCharacteristic(UUID_CHARACTERISTIC_COMBO, services)!.read());
-    print(comboData.aA);
-
-    // reset reading index to 0
-    await commandMode.write([1, ((0 >> 8) & 255), (0 & 255)]);
-
-    // data decoden en sessies aanmaken
-    int i = -1;
-    for (int i2 = 0; i2 <= buffer.length; i2++) {
-      if (i2 == buffer.length ||
-          (buffer[i2]).toInt() == 252 ||
-          (buffer[i2]).toInt() == 253) {
-        if (i != -1) {
-          if (i2 - i > 8) {
-            var session = _createSession(buffer.getRange(i, i2).toList());
-            if (session != null) {
-              sessions.add(session);
-            }
-          }
-        }
-        i = i2;
-      }
-    }
-
-    // reference time zetten
+  Future<void> _setReferenceTime() async {
     int timeInMillis = DateTime.now().millisecondsSinceEpoch;
     var timeArr = [
       (((timeInMillis >> 24).toInt() & 255)),
@@ -314,13 +209,64 @@ class DeviceScreen extends StatelessWidget {
       (((timeInMillis >> 8).toInt() & 255)),
       ((timeInMillis & 255).toInt())
     ];
-    await _getCharacteristic(UUID_CHARACTERISTIC_DATETIME, services)!
-        .write(timeArr);
+    await dateTimeCharacteristic.write(timeArr);
+  }
 
-    //flash van ring verwijderen
-    if (!debug) {
-      await commandMode.write([2, ((0 >> 8) & 255), (0 & 255)]);
+  Future<void> _removeRingFlash() async {
+    await commandModeCharacteristic.write([2, ((0 >> 8) & 255), (0 & 255)]);
+  }
+
+  List<int> _getRandomBytes() {
+    final math = Random();
+    return [
+      math.nextInt(255),
+      math.nextInt(255),
+      math.nextInt(255),
+      math.nextInt(255)
+    ];
+  }
+
+  Future<void> _downloadData(List<BluetoothService> services) async {
+    _pupulateCharacteristics(services);
+
+    var buffer = <int>[];
+
+    //get flashstate for used memory
+    var flashState = await _getFlashState();
+    int startAddress = 0;
+    int endAddress =
+        (((flashState[0]) & 255).toInt() << 8) | (flashState[1] & 255).toInt();
+
+    // set command mode for reading
+    await commandModeCharacteristic
+        .write([startAddress, ((0 >> 8) & 255), (0 & 255)]);
+
+    // read MM data and add to buffer
+    while (startAddress < endAddress) {
+      var bArr = await dataCharacterisitc.read();
+      print("current address: $startAddress");
+      buffer.addAll(bArr.getRange(2, 18));
+      startAddress += 16;
     }
+
+    //read combo data
+    ComboData comboData = ComboData(await comboCharacteristic.read());
+
+    // reset reading index to 0
+    await commandModeCharacteristic.write([1, ((0 >> 8) & 255), (0 & 255)]);
+
+    // decode data buffer
+    Recording recording = Recording().decode(buffer);
+    recording.aA = comboData.aA;
+
+    // set reference time
+    await _setReferenceTime();
+
+    // remove flash from ring
+    if (!debug) {
+      await _removeRingFlash();
+    }
+    print(recording);
   }
 
   // services list
