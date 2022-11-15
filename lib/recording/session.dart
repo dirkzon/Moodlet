@@ -19,9 +19,7 @@ class Session {
     List<Entry> entries = [];
     for (int i = 8; i <= bArr.length - 4; i += 4) {
       var mm = (bArr[i + 1] & 255);
-      if (mm > 100) {
-        valid = false;
-      }
+      if (mm > 100) valid = false;
       entries.add(
           Entry((bArr[i] & 255), mm, (bArr[i + 2] & 255), (bArr[i + 3] & 255)));
     }
@@ -35,8 +33,8 @@ class Session {
                 ((bArr[3] & 255) << 8) |
                 (bArr[4] & 255))) *
         1000;
-    DateTime date = DateTime.fromMicrosecondsSinceEpoch(epoch * 1000);
 
-    return Session(date, valid, entries);
+    return Session(
+        DateTime.fromMicrosecondsSinceEpoch(epoch * 1000), valid, entries);
   }
 }

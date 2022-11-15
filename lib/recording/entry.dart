@@ -3,7 +3,7 @@ class Entry {
   late int scrn;
   // moodmetric level
   late int mm;
-  //  raw level of skin conductance
+  // raw level of skin conductance
   late int scl;
   // amount of steps
   late int steps;
