@@ -2,7 +2,11 @@ import 'package:bletest/ble/bluetooth_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../sensor/moodmetric_sensor_manager.dart';
+
 class FindDevicesScreen extends StatefulWidget {
+  const FindDevicesScreen({super.key});
+
   @override
   _FindDevicesPageState createState() => _FindDevicesPageState();
 }
@@ -10,6 +14,8 @@ class FindDevicesScreen extends StatefulWidget {
 class _FindDevicesPageState extends State<FindDevicesScreen> {
   @override
   Widget build(BuildContext context) {
+    BluetoothManager bluetoothProvider = Provider.of<BluetoothManager>(context);
+    SensorManager sensorProvidor = Provider.of<SensorManager>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Find devices'),
@@ -24,31 +30,28 @@ class _FindDevicesPageState extends State<FindDevicesScreen> {
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
               )),
-          if (context.watch<BluetoothManager>().connected)
+          if (sensorProvidor.connected)
             ListTile(
                 trailing: SizedBox(
                   width: 80,
                   child: Row(
                     children: [
-                      Text(
-                          "${context.watch<BluetoothManager>().connecedSensor.baterryLevel} %"),
+                      Text("${sensorProvidor.sensor.baterryLevel} %"),
                       IconButton(
-                          onPressed: () =>
-                              context.read<BluetoothManager>().disconnect(),
-                          icon: Icon(Icons.close))
+                          onPressed: () => bluetoothProvider.disconnect(),
+                          icon: const Icon(Icons.close))
                     ],
                   ),
                 ),
-                title: Text(
-                    context.watch<BluetoothManager>().connecedSensor.name)),
+                title: Text(sensorProvidor.sensor.name)),
           const Divider(thickness: 2, indent: 10, endIndent: 10),
           Expanded(
               flex: 0,
               child: ListTile(
                 trailing: IconButton(
                   color: Colors.black,
-                  onPressed: () => context.read<BluetoothManager>().scan(),
-                  icon: context.watch<BluetoothManager>().isScanning
+                  onPressed: () => bluetoothProvider.scan(),
+                  icon: bluetoothProvider.isScanning
                       ? const Icon(Icons.bluetooth_searching)
                       : const Icon(Icons.bluetooth),
                 ),
@@ -57,22 +60,31 @@ class _FindDevicesPageState extends State<FindDevicesScreen> {
               )),
           Expanded(
               child: ListView.builder(
-                  itemCount:
-                      context.watch<BluetoothManager>().availableDevices.length,
+                  itemCount: bluetoothProvider.availableDevices
+                      .where((d) => !d.connected)
+                      .length,
                   itemBuilder: ((context, index) {
-                    var device = context
-                        .watch<BluetoothManager>()
-                        .availableDevices[index];
+                    var devices = bluetoothProvider.availableDevices
+                        .where((d) => !d.connected);
+                    var device = devices.toList()[index];
                     return ListTile(
-                      title: Text(device.name),
+                      title: Text(device.device.name),
                       trailing: TextButton(
                         onPressed: () =>
-                            context.read<BluetoothManager>().connect(device.id),
+                            bluetoothProvider.connect(device.device.id),
                         child: const Text('connect'),
                       ),
                     );
                   }))),
           const Divider(thickness: 2, indent: 10, endIndent: 10),
+          if (sensorProvidor.connected)
+            Expanded(
+                child: IconButton(
+                    onPressed: () => sensorProvidor.downloadData(),
+                    icon: const Icon(Icons.download))),
+          LinearProgressIndicator(
+            value: sensorProvidor.progress,
+          ),
         ]),
       ),
     );

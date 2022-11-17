@@ -34,10 +34,11 @@ class _DeiscoveredDevicesState extends State<DiscoveredDevices> {
                 var device =
                     context.watch<BluetoothManager>().availableDevices[index];
                 return ListTile(
-                  title: Text(device.name),
+                  title: Text(device.device.name),
                   trailing: TextButton(
-                    onPressed: () =>
-                        context.read<BluetoothManager>().connect(device.id),
+                    onPressed: () => context
+                        .read<BluetoothManager>()
+                        .connect(device.device.id),
                     child: const Text('connect'),
                   ),
                 );

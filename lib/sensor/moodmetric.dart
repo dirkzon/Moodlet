@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
 import '../recording/combodata.dart';
@@ -10,6 +9,9 @@ class Moodmetric {
   late String name;
   late BluetoothDevice peripheral;
 
+  var buffer = <int>[];
+  late ComboData comboData;
+
   static const uuidCharacteristicCommandMode =
       "db321950-97c1-4767-b255-982fe3030b2b";
   static const uuidCharacteristicFlashState =
@@ -20,6 +22,7 @@ class Moodmetric {
   static const uuidCharacteristicCombo = "90bd4fd0-4309-11e4-916c-0800200c9a66";
   static const uuidCaharacteristicBatteryLevel =
       "00002a19-0000-1000-8000-00805f9b34fb";
+  static const uuidMoodmetricService = "dd499b70-e4cd-4988-a923-a7aab7283f8e";
 
   late BluetoothCharacteristic flashStateCharacteristic;
   late BluetoothCharacteristic commandModeCharacteristic;
@@ -50,14 +53,10 @@ class Moodmetric {
 
   Future<void> setBatteryLevel() async {
     var level = await batteryLevelCharacteristic.read();
-    baterryLevel = level.first;
+    baterryLevel = (level.first.toInt() & 255);
   }
 
-  Future<List<int>> _getFlashState() async {
-    return await flashStateCharacteristic.read();
-  }
-
-  Future<void> _setReferenceTime() async {
+  setReferenceTime() async {
     int timeInMillis = DateTime.now().millisecondsSinceEpoch;
     var timeArr = [
       (((timeInMillis >> 24).toInt() & 255)),
@@ -68,44 +67,39 @@ class Moodmetric {
     await dateTimeCharacteristic.write(timeArr);
   }
 
-  Future<Recording> downloadMmData() async {
-    var buffer = <int>[];
-
-    //get flashstate for used memory
-    var flashState = await _getFlashState();
-    int startAddress = 0;
-    int endAddress =
-        (((flashState[0]) & 255).toInt() << 8) | (flashState[1] & 255).toInt();
-
-    // set command mode for reading
-    await commandModeCharacteristic
-        .write([startAddress, ((0 >> 8) & 255), (0 & 255)]);
-
-    // read MM data and add to buffer
-    while (startAddress < endAddress) {
-      var bArr = await dataCharacterisitc.read();
-      debugPrint("current address: $startAddress");
-      buffer.addAll(bArr.getRange(2, 18));
-      startAddress += 16;
-    }
-
-    //read combo data
-    ComboData comboData = ComboData(await comboCharacteristic.read());
-
-    // reset reading index to 0
-    await commandModeCharacteristic.write([1, ((0 >> 8) & 255), (0 & 255)]);
-
-    // decode data buffer
-    Recording recording = Recording.decode(buffer);
-    recording.aA = comboData.aA;
-
-    // set reference time
-    await _setReferenceTime();
-
-    // remove flash from ring
+  removeFlash() async {
     if (!debug) {
       await commandModeCharacteristic.write([2, ((0 >> 8) & 255), (0 & 255)]);
     }
-    return recording;
+  }
+
+  decodeBuffer() async {
+    return Recording.decode(buffer);
+  }
+
+  resetCommandMode() async {
+    await commandModeCharacteristic.write([1, ((0 >> 8) & 255), (0 & 255)]);
+  }
+
+  getComboData() async {
+    return ComboData(await comboCharacteristic.read());
+  }
+
+  setCommandModeReading(int startAddress) async {
+    await commandModeCharacteristic
+        .write([startAddress, ((0 >> 8) & 255), (0 & 255)]);
+  }
+
+  Future<int> getFlashState() async {
+    var flashState = await flashStateCharacteristic.read();
+    return (((flashState[0]) & 255).toInt() << 8) |
+        (flashState[1] & 255).toInt();
+  }
+
+  Future<int> readMmData(int startAddress) async {
+    var bArr = await dataCharacterisitc.read();
+    //debugPrint("current address: $startAddress");
+    buffer.addAll(bArr.getRange(2, 18));
+    return startAddress + 16;
   }
 }

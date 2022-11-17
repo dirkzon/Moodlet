@@ -1,4 +1,7 @@
+import 'package:bletest/pages/ble_page/bluetooth_off_screen.dart';
+import 'package:bletest/sensor/moodmetric_sensor_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:provider/provider.dart';
 
 import 'ble/bluetooth_manager.dart';
@@ -18,12 +21,28 @@ class FlutterApp extends StatelessWidget {
           create: (context) => BluetoothManager(),
         ),
       ],
-      child: MaterialApp(
-        title: 'test',
-        theme: ThemeData(
-          primaryColor: Colors.blue,
-        ),
-        home: FindDevicesScreen(),
+      child: Consumer<BluetoothManager>(
+        builder: (context, bleManager, child) {
+          return ChangeNotifierProvider<SensorManager>(
+            create: (context) => SensorManager(bleManager),
+            child: MaterialApp(
+              title: 'prototype',
+              theme: ThemeData(
+                primaryColor: Colors.blue,
+              ),
+              home: StreamBuilder<BluetoothState>(
+                  stream: FlutterBlue.instance.state,
+                  initialData: BluetoothState.unknown,
+                  builder: (c, snapshot) {
+                    final state = snapshot.data;
+                    if (state == BluetoothState.on) {
+                      return const FindDevicesScreen();
+                    }
+                    return BluetoothOffScreen(state: state);
+                  }),
+            ),
+          );
+        },
       ),
     );
   }
