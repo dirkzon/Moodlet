@@ -23,6 +23,8 @@ Intall the dependencies.
 
 `flutter pub get`
 
+turn on USB-debugging in the developer settings on your phone
+
 Run the app
 
 `flutter run lib/main.dart`
