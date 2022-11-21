@@ -20,29 +20,27 @@ class FlutterApp extends StatelessWidget {
         ChangeNotifierProvider<BluetoothManager>(
           create: (context) => BluetoothManager(),
         ),
+        ChangeNotifierProxyProvider<BluetoothManager, SensorManager>(
+          create: (BuildContext context) => SensorManager(
+              Provider.of<BluetoothManager>(context, listen: false)),
+          update: ((_, ble, sensor) => sensor!.update(ble)),
+        ),
       ],
-      child: Consumer<BluetoothManager>(
-        builder: (context, bleManager, child) {
-          return ChangeNotifierProvider<SensorManager>(
-            create: (context) => SensorManager(bleManager),
-            child: MaterialApp(
-              title: 'prototype',
-              theme: ThemeData(
-                primaryColor: Colors.blue,
-              ),
-              home: StreamBuilder<BluetoothState>(
-                  stream: FlutterBlue.instance.state,
-                  initialData: BluetoothState.unknown,
-                  builder: (c, snapshot) {
-                    final state = snapshot.data;
-                    if (state == BluetoothState.on) {
-                      return const FindDevicesScreen();
-                    }
-                    return BluetoothOffScreen(state: state);
-                  }),
-            ),
-          );
-        },
+      child: MaterialApp(
+        title: 'prototype',
+        theme: ThemeData(
+          primaryColor: Colors.blue,
+        ),
+        home: StreamBuilder<BluetoothState>(
+            stream: FlutterBlue.instance.state,
+            initialData: BluetoothState.unknown,
+            builder: (c, snapshot) {
+              final state = snapshot.data;
+              if (state == BluetoothState.on) {
+                return const FindDevicesScreen();
+              }
+              return BluetoothOffScreen(state: state);
+            }),
       ),
     );
   }

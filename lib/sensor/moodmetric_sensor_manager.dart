@@ -13,9 +13,12 @@ class SensorManager with ChangeNotifier {
   double progress = 0;
 
   SensorManager(BluetoothManager bleManager) {
-    bleManager.addListener(() async {
-      await _updateSensor(bleManager);
-    });
+    _updateSensor(bleManager);
+  }
+
+  SensorManager update(BluetoothManager manager) {
+    _updateSensor(manager);
+    return this;
   }
 
   _updateSensor(BluetoothManager manager) async {
