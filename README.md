@@ -1,16 +1,30 @@
-# bletest
+# Prototype Stress measurement app
 
-A new Flutter project.
+This repository hold a functional protoype regarding 
+the downloading of the data from the MoodMetric ring.
+The data which is downloaded contains:
+- skin reactions per minute
+- moodmetric level
+- raw level of skin conductance
+- amount of steps
 
-## Getting Started
+## Packages
+- The app is built with [Flutter](https://flutter.dev/)
+- The bluetooth connection is handeled by [FlutterBlue](https://pub.dev/packages/flutter_blue)
 
-This project is a starting point for a Flutter application.
+## Installation
+First clone this repositry.
 
-A few resources to get you started if this is your first Flutter project:
+`git clone https://github.com/dirkzon/Spectrum-stress-prototype.git`
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Then [Install Flutter](https://docs.flutter.dev/get-started/install) by following the guide on their website.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Intall the dependencies.
+
+`flutter pub get`
+
+turn on USB-debugging in the developer settings on your phone
+
+Run the app
+
+`flutter run lib/main.dart`
