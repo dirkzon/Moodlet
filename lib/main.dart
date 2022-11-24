@@ -32,7 +32,7 @@ class MoodlApp extends StatelessWidget {
         ChangeNotifierProxyProvider<SensorManager, HiveEntryRepository>(
           create: (_) => HiveEntryRepository(),
           update: ((_, sensor, port) {
-            port!.saveEntries(sensor.recording);
+            port!.update(sensor);
             return port;
           }),
         ),

@@ -4,6 +4,8 @@ import 'package:bletest/recording/session.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 
+import '../../../sensor/moodmetric_sensor_manager.dart';
+
 class HiveEntryRepository with ChangeNotifier {
   Box<HiveEntry> box = Hive.box<HiveEntry>("entries");
 
@@ -15,12 +17,24 @@ class HiveEntryRepository with ChangeNotifier {
         .toList();
   }
 
-  saveEntries(Recording rec) {
+  update(SensorManager manager) {
+    if (manager.recording.sessions.isNotEmpty) {
+      _saveRecording(manager.recording);
+      manager.recording.sessions = [];
+    }
+  }
+
+  _saveRecording(Recording rec) {
+    if (rec.sessions.isEmpty) return;
+    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
     for (Session session in rec.sessions) {
       for (var i = 0; i < session.entries.length; i++) {
-        DateTime date = session.date.add(Duration(minutes: i));
-        HiveEntry entry = HiveEntry(date: date, mm: session.entries[i].mm);
-        box.put(date, entry);
+        if (session.valid) {
+          DateTime date = session.date.add(Duration(minutes: i));
+          HiveEntry entry = HiveEntry(date: date, mm: session.entries[i].mm);
+          box.put(date.toString(), entry);
+          print('save mm:${entry.mm}');
+        }
       }
     }
   }

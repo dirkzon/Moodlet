@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'models/hiveEntry.dart';
 
 class HiveConfig {
   static setUp() async {
+    debugPrint('Setting up Hive');
     await Hive.initFlutter();
 
     //entries
