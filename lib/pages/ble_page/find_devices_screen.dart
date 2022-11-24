@@ -16,6 +16,7 @@ class _FindDevicesPageState extends State<FindDevicesScreen> {
   Widget build(BuildContext context) {
     BluetoothManager bluetoothProvider = Provider.of<BluetoothManager>(context);
     SensorManager sensorProvidor = Provider.of<SensorManager>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Find devices'),
@@ -80,7 +81,7 @@ class _FindDevicesPageState extends State<FindDevicesScreen> {
           if (sensorProvidor.connected)
             Expanded(
                 child: IconButton(
-                    onPressed: () => sensorProvidor.downloadData(),
+                    onPressed: () async => sensorProvidor.downloadData(),
                     icon: const Icon(Icons.download))),
           LinearProgressIndicator(
             value: sensorProvidor.progress,
