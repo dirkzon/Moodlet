@@ -1,12 +1,7 @@
 # Prototype Stress measurement app
 
-This repository hold a functional protoype regarding 
-the downloading of the data from the MoodMetric ring.
-The data which is downloaded contains:
-- skin reactions per minute
-- moodmetric level
-- raw level of skin conductance
-- amount of steps
+This repository hold the code for the Moodl app. Moodl is an arousal measurement app focussed on people with A.S.D. 
+The goal of the app is to give people with A.S.D. a better insight into their stress, both good and bad.
 
 ## Packages
 - The app is built with [Flutter](https://flutter.dev/)
@@ -15,7 +10,7 @@ The data which is downloaded contains:
 ## Installation
 First clone this repositry.
 
-`git clone https://github.com/dirkzon/Spectrum-stress-prototype.git`
+`git clone https://github.com/dirkzon/Moodl.git`
 
 Then [Install Flutter](https://docs.flutter.dev/get-started/install) by following the guide on their website.
 
