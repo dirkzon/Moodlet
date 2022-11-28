@@ -24,4 +24,8 @@ class Recording {
     }
     return Recording(sessions);
   }
+
+  bool isNull() {
+    return sessions.isEmpty;
+  }
 }

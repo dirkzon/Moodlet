@@ -1,3 +1,5 @@
+import 'package:bletest/comms/hive/adaptors/hiveEntryRepository.dart';
+import 'package:bletest/comms/hive/hiveConfig.dart';
 import 'package:bletest/pages/ble_page/bluetooth_off_screen.dart';
 import 'package:bletest/sensor/moodmetric_sensor_manager.dart';
 import 'package:flutter/material.dart';
@@ -7,12 +9,12 @@ import 'package:provider/provider.dart';
 import 'ble/bluetooth_manager.dart';
 import 'pages/ble_page/find_devices_screen.dart';
 
-void main() {
-  runApp(FlutterApp());
+void main() async {
+  await HiveConfig.setUp();
+  runApp(MoodlApp());
 }
 
-// the actuall constructor for the app
-class FlutterApp extends StatelessWidget {
+class MoodlApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -20,14 +22,23 @@ class FlutterApp extends StatelessWidget {
         ChangeNotifierProvider<BluetoothManager>(
           create: (context) => BluetoothManager(),
         ),
+        ChangeNotifierProvider<HiveEntryRepository>(
+            create: (_) => HiveEntryRepository()),
         ChangeNotifierProxyProvider<BluetoothManager, SensorManager>(
           create: (BuildContext context) => SensorManager(
               Provider.of<BluetoothManager>(context, listen: false)),
-          update: ((_, ble, sensor) => sensor!.update(ble)),
+          update: (_, ble, sensor) => sensor!.update(ble),
+        ),
+        ChangeNotifierProxyProvider<SensorManager, HiveEntryRepository>(
+          create: (_) => HiveEntryRepository(),
+          update: ((_, sensor, port) {
+            port!.update(sensor);
+            return port;
+          }),
         ),
       ],
       child: MaterialApp(
-        title: 'prototype',
+        title: 'Moodl',
         theme: ThemeData(
           primaryColor: Colors.blue,
         ),

@@ -1,4 +1,5 @@
 import 'package:bletest/ble/bluetooth_manager.dart';
+import 'package:bletest/comms/hive/adaptors/hiveEntryRepository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +17,8 @@ class _FindDevicesPageState extends State<FindDevicesScreen> {
   Widget build(BuildContext context) {
     BluetoothManager bluetoothProvider = Provider.of<BluetoothManager>(context);
     SensorManager sensorProvidor = Provider.of<SensorManager>(context);
+    HiveEntryRepository entry = Provider.of<HiveEntryRepository>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Find devices'),
@@ -80,7 +83,7 @@ class _FindDevicesPageState extends State<FindDevicesScreen> {
           if (sensorProvidor.connected)
             Expanded(
                 child: IconButton(
-                    onPressed: () => sensorProvidor.downloadData(),
+                    onPressed: () async => sensorProvidor.downloadData(),
                     icon: const Icon(Icons.download))),
           LinearProgressIndicator(
             value: sensorProvidor.progress,

@@ -9,7 +9,7 @@ import 'moodmetric.dart';
 class SensorManager with ChangeNotifier {
   bool connected = false;
   late Moodmetric sensor;
-  late Recording recording;
+  Recording recording = Recording([]);
   double progress = 0;
 
   SensorManager(BluetoothManager bleManager) {
@@ -52,7 +52,6 @@ class SensorManager with ChangeNotifier {
     while (startAddress < endAddress) {
       startAddress = await sensor.readMmData(startAddress);
       _setProgress(startAddress, endAddress);
-      notifyListeners();
     }
     ComboData combo = await sensor.getComboData();
     await sensor.resetCommandMode();
@@ -60,6 +59,7 @@ class SensorManager with ChangeNotifier {
     recording.aA = combo.aA;
     await sensor.setReferenceTime();
     await sensor.removeFlash();
+    notifyListeners();
   }
 
   _setProgress(int start, int end) {
