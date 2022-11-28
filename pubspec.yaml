@@ -60,7 +60,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -77,22 +76,45 @@ flutter:
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
 
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
+
+  fonts:
+    - family: plus-jakarta-sans
+      fonts:
+        - asset: lib/fonts/plus_jakarta_sans/plusJakartaSans-Bold.ttf
+          weight: 700
+        - asset: lib/fonts/plus_jakarta_sans/PlusJakartaSans-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: lib/fonts/plus_jakarta_sans/PlusJakartaSans-ExtraBold.ttf
+          weight: 800
+        - asset: lib/fonts/plus_jakarta_sans/PlusJakartaSans-ExtraBoldItalic.ttf
+          style: italic
+          weight: 800
+        - asset: lib/fonts/plus_jakarta_sans/PlusJakartaSans-ExtraLight.ttf
+          weight: 200
+        - asset: lib/fonts/plus_jakarta_sans/PlusJakartaSans-ExtraLightItalic.ttf
+          weight: 200
+          style: italic
+        - asset: lib/fonts/plus_jakarta_sans/PlusJakartaSans-Italic.ttf
+          weight: 400
+          style: italic
+        - asset: lib/fonts/plus_jakarta_sans/PlusJakartaSans-Light.ttf
+          weight: 300
+        - asset: lib/fonts/plus_jakarta_sans/PlusJakartaSans-LightItalic.ttf
+          style: italic
+          weight: 300
+        - asset: lib/fonts/plus_jakarta_sans/PlusJakartaSans-Medium.ttf
+          weight: 500
+        - asset: lib/fonts/plus_jakarta_sans/PlusJakartaSans-MediumItalic.ttf
+          style: italic
+          weight: 500
+        - asset: lib/fonts/plus_jakarta_sans/PlusJakartaSans-Regular.ttf
+          weight: 400
+        - asset: lib/fonts/plus_jakarta_sans/PlusJakartaSans-SemiBold.ttf
+          weight: 600
+        - asset: lib/fonts/plus_jakarta_sans/PlusJakartaSans-SemiBoldItalic.ttf
+          weight: 600
+          style: italic
+
+
+

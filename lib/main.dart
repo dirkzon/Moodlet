@@ -1,13 +1,12 @@
 import 'package:bletest/comms/hive/adaptors/hiveEntryRepository.dart';
 import 'package:bletest/comms/hive/hiveConfig.dart';
-import 'package:bletest/pages/ble_page/bluetooth_off_screen.dart';
+import 'package:bletest/pages/navigation_page.dart';
+import 'package:bletest/pages/theme_config.dart';
 import 'package:bletest/sensor/moodmetric_sensor_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:provider/provider.dart';
 
 import 'ble/bluetooth_manager.dart';
-import 'pages/ble_page/find_devices_screen.dart';
 
 void main() async {
   await HiveConfig.setUp();
@@ -38,21 +37,9 @@ class MoodlApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Moodl',
-        theme: ThemeData(
-          primaryColor: Colors.blue,
-        ),
-        home: StreamBuilder<BluetoothState>(
-            stream: FlutterBlue.instance.state,
-            initialData: BluetoothState.unknown,
-            builder: (c, snapshot) {
-              final state = snapshot.data;
-              if (state == BluetoothState.on) {
-                return const FindDevicesScreen();
-              }
-              return BluetoothOffScreen(state: state);
-            }),
-      ),
+          title: 'Moodl',
+          theme: ThemeConfig.config(),
+          home: const NavigationPage()),
     );
   }
 }
