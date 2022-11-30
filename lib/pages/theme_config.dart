@@ -11,7 +11,7 @@ mixin ThemeConfig {
               fontWeight: FontWeight.w600,
             ),
             //editorial
-            titleLarge: TextStyle(fontSize: 48.0, fontWeight: FontWeight.bold),
+            titleLarge: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w400),
             //headings
             headlineMedium: TextStyle(
               fontSize: 18.0,
@@ -62,10 +62,21 @@ mixin ThemeConfig {
           labelStyle: TextStyle(color: Colors.white),
           iconTheme: IconThemeData(color: Colors.white),
           deleteIconColor: Colors.white,
-        )
+        ),
 
-        //dropdown
-
-        );
+        //text button
+        textButtonTheme: TextButtonThemeData(
+            style: ButtonStyle(
+                padding: MaterialStateProperty.all(const EdgeInsets.all(24.0)),
+                textStyle: MaterialStateProperty.all(const TextStyle(
+                    fontSize: 16.0, fontWeight: FontWeight.w400)))),
+        appBarTheme: const AppBarTheme(
+            titleTextStyle: TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.w600,
+                color: Colors.black),
+            toolbarHeight: 150,
+            color: Colors.transparent,
+            shadowColor: Colors.transparent));
   }
 }

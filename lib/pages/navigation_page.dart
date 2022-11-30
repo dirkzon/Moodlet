@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'ble_page/find_devices_screen.dart';
 import 'home_page/home_screen.dart';
+import 'settings_page/settings_screen.dart';
 
 class NavigationPage extends StatefulWidget {
   const NavigationPage({key}) : super(key: key);
@@ -16,7 +17,7 @@ class _NavigationState extends State<NavigationPage> {
   final List _screens = [
     const HomeScreen(),
     const HomeScreen(),
-    const FindDevicesScreen()
+    const SettingsScreen(),
   ];
 
   void _updateIndex(int value) {
@@ -30,10 +31,12 @@ class _NavigationState extends State<NavigationPage> {
     return Scaffold(
         body: _screens[_index],
         bottomNavigationBar: BottomNavigationBar(
+          elevation: 20.0,
+          enableFeedback: true,
           currentIndex: _index,
           onTap: _updateIndex,
           iconSize: 35,
-          landscapeLayout: BottomNavigationBarLandscapeLayout.linear,
+          landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
           showSelectedLabels: false,
           showUnselectedLabels: false,
           items: const [
@@ -45,13 +48,13 @@ class _NavigationState extends State<NavigationPage> {
                 tooltip: 'Journal'),
             BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.home,
+                  Icons.home_outlined,
                 ),
                 label: 'Home',
                 tooltip: 'Home'),
             BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.settings,
+                  Icons.settings_outlined,
                 ),
                 label: 'Settings',
                 tooltip: 'Settings'),
