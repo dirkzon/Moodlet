@@ -1,6 +1,8 @@
 import 'package:bletest/pages/settings_page/design_settings_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'bluetooth_settings_screen.dart';
+
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -18,6 +20,14 @@ class _SettingsState extends State<SettingsScreen> {
             backgroundColor: Colors.transparent,
             title: const Text('Settings'),
           ),
+          TextButton(
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: ((context) => const BleutoothSettingsScreen()))),
+              child: Row(
+                children: const [Text('Bluetooth'), Spacer(), Text('>')],
+              )),
           TextButton(
               onPressed: () {},
               child: Row(
