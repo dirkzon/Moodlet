@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'ble_page/find_devices_screen.dart';
 import 'home_page/home_screen.dart';
+import 'journal_page/journal_screen.dart';
 import 'settings_page/settings_screen.dart';
 
 class NavigationPage extends StatefulWidget {
@@ -15,7 +16,7 @@ class _NavigationState extends State<NavigationPage> {
   int _index = 1;
 
   final List _screens = [
-    const HomeScreen(),
+    const JournalScreen(),
     const HomeScreen(),
     const SettingsScreen(),
   ];

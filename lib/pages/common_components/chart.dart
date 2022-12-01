@@ -9,9 +9,10 @@ class MoodChart extends StatelessWidget {
   late Duration duration;
   late DateTime start;
   late DateTime end;
+  Color background = Colors.transparent;
   bool singleDay = true;
 
-  MoodChart(this.data, this.start, this.end, {super.key}) {
+  MoodChart(this.data, this.start, this.end, this.background, {super.key}) {
     duration = end.difference(start);
     singleDay = duration.inHours <= 24;
   }
@@ -87,86 +88,80 @@ class MoodChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: const Color.fromARGB(25, 244, 119, 24),
-        child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Colors.transparent,
-            ),
-            margin: const EdgeInsets.all(13.0),
-            padding: const EdgeInsets.all(13.0),
-            child: Column(
-              children: [
-                Container(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(children: [
-                      Row(
-                        children: [
-                          const Text(
-                            "Moodl levels",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500, fontSize: 18),
-                          ),
-                          const Spacer(),
-                          Text(
-                            singleDay
-                                ? DateFormat('EEE MMMM d')
-                                    .format(start)
-                                    .toString()
-                                : "${DateFormat('EEE MMMM d').format(start)} - ${DateFormat('EEE MMMM d').format(end)}",
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w500, fontSize: 10),
-                          ),
-                        ],
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: background,
+        ),
+        margin: const EdgeInsets.all(13.0),
+        padding: const EdgeInsets.all(13.0),
+        child: Column(
+          children: [
+            Container(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(children: [
+                  Row(
+                    children: [
+                      const Text(
+                        "Moodl levels",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 18),
                       ),
-                      if (data.isEmpty)
-                        Row(children: const [
-                          Text(
-                            "No data found",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 14,
-                                color: Colors.red),
-                          )
-                        ]),
-                    ])),
-                SizedBox(
-                  height: 180,
-                  child: charts.TimeSeriesChart(
-                    _getData(),
-                    animate: true,
-                    animationDuration: const Duration(milliseconds: 750),
-                    behaviors: [
-                      charts.PanAndZoomBehavior(),
-                      charts.SlidingViewport(
-                        charts.SelectionModelType.action,
+                      const Spacer(),
+                      Text(
+                        singleDay
+                            ? DateFormat('EEE MMMM d').format(start).toString()
+                            : "${DateFormat('EEE MMMM d').format(start)} - ${DateFormat('EEE MMMM d').format(end)}",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 10),
                       ),
                     ],
-                    primaryMeasureAxis: charts.NumericAxisSpec(
-                        tickProviderSpec: charts.StaticNumericTickProviderSpec(
-                            _createPrimaryTickSpec())),
-                    domainAxis: singleDay
-                        ? charts.DateTimeAxisSpec(
-                            tickProviderSpec:
-                                charts.StaticDateTimeTickProviderSpec(
-                                    _createSingleDayDomainTickSpec()))
-                        : const charts.DateTimeAxisSpec(
-                            tickFormatterSpec:
-                                charts.AutoDateTimeTickFormatterSpec(
-                              day: charts.TimeFormatterSpec(
-                                format: 'dd MMM',
-                                transitionFormat: 'dd MMM',
-                              ),
-                            ),
-                          ),
-                    defaultRenderer: charts.BarRendererConfig<DateTime>(
-                      maxBarWidthPx: 8,
-                      groupingType: charts.BarGroupingType.grouped,
-                      cornerStrategy: const charts.ConstCornerStrategy(50),
-                    ),
                   ),
-                )
-              ],
-            )));
+                  if (data.isEmpty)
+                    Row(children: const [
+                      Text(
+                        "No data found",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14,
+                            color: Colors.red),
+                      )
+                    ]),
+                ])),
+            SizedBox(
+              height: 180,
+              child: charts.TimeSeriesChart(
+                _getData(),
+                animate: true,
+                animationDuration: const Duration(milliseconds: 750),
+                behaviors: [
+                  charts.PanAndZoomBehavior(),
+                  charts.SlidingViewport(
+                    charts.SelectionModelType.action,
+                  ),
+                ],
+                primaryMeasureAxis: charts.NumericAxisSpec(
+                    tickProviderSpec: charts.StaticNumericTickProviderSpec(
+                        _createPrimaryTickSpec())),
+                domainAxis: singleDay
+                    ? charts.DateTimeAxisSpec(
+                        tickProviderSpec: charts.StaticDateTimeTickProviderSpec(
+                            _createSingleDayDomainTickSpec()))
+                    : const charts.DateTimeAxisSpec(
+                        tickFormatterSpec: charts.AutoDateTimeTickFormatterSpec(
+                          day: charts.TimeFormatterSpec(
+                            format: 'dd MMM',
+                            transitionFormat: 'dd MMM',
+                          ),
+                        ),
+                      ),
+                defaultRenderer: charts.BarRendererConfig<DateTime>(
+                  maxBarWidthPx: 8,
+                  groupingType: charts.BarGroupingType.grouped,
+                  cornerStrategy: const charts.ConstCornerStrategy(50),
+                ),
+              ),
+            )
+          ],
+        ));
   }
 }

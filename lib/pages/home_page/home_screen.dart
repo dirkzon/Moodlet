@@ -23,6 +23,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime start = DateTime.now();
+    DateTime end = DateTime.now().add(const Duration(days: 1));
+
     HiveEntryRepository entry = Provider.of<HiveEntryRepository>(context);
 
     return Scaffold(
@@ -33,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
               Text(
-                'Hello, Vine',
+                'Hello, Stan',
               ),
               Text(
                 'Nice to see you again!',
@@ -41,11 +44,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ])),
         const Spacer(),
-        MoodChart(
-            entry.getEntries(
-                DateTime.parse("2022-10-13"), DateTime.parse("2022-10-14")),
-            DateTime.parse("2022-10-13"),
-            (DateTime.parse("2022-10-14"))),
+        // MoodChart(
+        //     entry.getEntries(
+        //         DateTime.parse("2022-10-13"), DateTime.parse("2022-10-14")),
+        //     DateTime.parse("2022-10-13"),
+        //     (DateTime.parse("2022-10-14"))),
+        Container(
+          color: const Color.fromARGB(25, 244, 119, 24),
+          child: MoodChart(
+              entry.getEntries(start, end), start, end, Colors.transparent),
+        ),
         Container(
             alignment: Alignment.topLeft,
             padding: const EdgeInsets.only(top: 24, left: 24),
