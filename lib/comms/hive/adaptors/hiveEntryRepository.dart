@@ -10,11 +10,12 @@ class HiveEntryRepository with ChangeNotifier {
   Box<HiveEntry> box = Hive.box<HiveEntry>("entries");
 
   List<HiveEntry> getEntries(DateTime from, DateTime to) {
-    return box.values
+    List<HiveEntry> values = box.values
         .where((HiveEntry entry) =>
             entry.date.millisecondsSinceEpoch > from.millisecondsSinceEpoch &&
             entry.date.millisecondsSinceEpoch < to.millisecondsSinceEpoch)
         .toList();
+    return values.isEmpty ? [] : values;
   }
 
   update(SensorManager manager) {

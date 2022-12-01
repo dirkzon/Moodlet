@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../comms/hive/adaptors/hiveEntryRepository.dart';
+import '../../comms/hive/models/hiveEntry.dart';
 import '../common_components/chart.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,6 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    HiveEntryRepository entry = Provider.of<HiveEntryRepository>(context);
+
     return Scaffold(
         body: Column(
       children: [
@@ -36,7 +41,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ])),
         const Spacer(),
-        const MoodChart(),
+        MoodChart(
+            entry.getEntries(
+                DateTime.parse("2022-10-13"), DateTime.parse("2022-10-14")),
+            DateTime.parse("2022-10-13"),
+            (DateTime.parse("2022-10-14"))),
         Container(
             alignment: Alignment.topLeft,
             padding: const EdgeInsets.only(top: 24, left: 24),

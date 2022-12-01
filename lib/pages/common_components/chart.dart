@@ -4,45 +4,40 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:intl/intl.dart';
 import "package:collection/collection.dart";
 
-var data = [];
+class MoodChart extends StatelessWidget {
+  List<HiveEntry> data = [];
+  late Duration duration;
+  late DateTime start;
+  late DateTime end;
+  bool singleDay = true;
 
-var testData = [
-  HiveEntry(date: DateTime.parse("2022-11-30T06:30"), mm: 20),
-  HiveEntry(date: DateTime.parse("2022-11-30T08:08"), mm: 50),
-  HiveEntry(date: DateTime.parse("2022-11-30T08:50"), mm: 10),
-  HiveEntry(date: DateTime.parse("2022-11-30T12:12"), mm: 45),
-  HiveEntry(date: DateTime.parse("2022-11-30T14:12"), mm: 67),
-  HiveEntry(date: DateTime.parse("2022-11-30T19:17"), mm: 10),
-  HiveEntry(date: DateTime.parse("2022-11-30T19:18"), mm: 80),
-  HiveEntry(date: DateTime.parse("2022-11-30T21:23"), mm: 96),
-  HiveEntry(date: DateTime.parse("2022-11-30T07:08"), mm: 54),
-  HiveEntry(date: DateTime.parse("2022-11-30T09:50"), mm: 34),
-  HiveEntry(date: DateTime.parse("2022-11-30T14:12"), mm: 58),
-  HiveEntry(date: DateTime.parse("2022-11-30T14:12"), mm: 52),
-  HiveEntry(date: DateTime.parse("2022-11-30T18:17"), mm: 70),
-  HiveEntry(date: DateTime.parse("2022-11-30T20:18"), mm: 13),
-  HiveEntry(date: DateTime.parse("2022-11-30T20:23"), mm: 100),
-];
-
-class MoodChart extends StatefulWidget {
-  const MoodChart({super.key});
-
-  @override
-  _MoodChartState createState() => _MoodChartState();
-}
-
-// do not use moodchart in SingleChildScrollView
-class _MoodChartState extends State<MoodChart> {
-  DateTime date = DateTime.now();
+  MoodChart(this.data, this.start, this.end, {super.key}) {
+    duration = end.difference(start);
+    singleDay = duration.inHours <= 24;
+  }
 
   List<HiveEntry> _changeDataResulution(Iterable<HiveEntry> data) {
     var grouped = groupBy(data, (HiveEntry entry) {
-      return entry.date.hour;
+      var date = entry.date;
+      if (singleDay) {
+        return DateTime(date.year, date.month, date.day, date.hour);
+      }
+      if (duration.inHours < 24) {
+        return DateTime(
+            date.year, date.month, date.day, date.hour, date.minute);
+      }
+      if (duration.inDays > 1) {
+        return DateTime(date.year, date.month, date.day, date.hour);
+      }
+      if (duration.inDays > 6) {
+        return DateTime(date.year, date.month, date.day);
+      }
+      return DateTime(date.year, date.month, date.day, date.hour);
     });
 
-    return grouped.entries.map((MapEntry<int, List<HiveEntry>> item) {
+    return grouped.entries.map((MapEntry<DateTime, List<HiveEntry>> item) {
       return HiveEntry(
-          date: DateTime(date.year, date.month, date.day, item.key),
+          date: item.key,
           mm: item.value.map((entry) => entry.mm).reduce((a, b) => a + b) ~/
               item.value.length);
     }).toList();
@@ -54,7 +49,7 @@ class _MoodChartState extends State<MoodChart> {
           id: 'moodData',
           measureFn: (entry, index) => entry.mm,
           domainFn: (entry, index) => entry.date,
-          data: _changeDataResulution(testData),
+          data: _changeDataResulution(data),
           fillColorFn: (entry, index) =>
               const charts.Color(r: 243, g: 139, b: 76)),
     ];
@@ -70,9 +65,9 @@ class _MoodChartState extends State<MoodChart> {
     ];
   }
 
-  List<charts.TickSpec<DateTime>> _createDomainTickSpec() {
+  List<charts.TickSpec<DateTime>> _createSingleDayDomainTickSpec() {
     const styleSpec = charts.TextStyleSpec(fontSize: 12);
-    DateTime startOfDay = DateTime(date.year, date.month, date.day);
+    DateTime startOfDay = DateTime(start.year, start.month, start.day);
     return [
       charts.TickSpec(startOfDay.add(const Duration(hours: 0)),
           label: '', style: styleSpec),
@@ -104,21 +99,37 @@ class _MoodChartState extends State<MoodChart> {
               children: [
                 Container(
                     padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                      children: [
-                        const Text(
-                          "Moodl levels",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 18),
-                        ),
-                        const Spacer(),
-                        Text(
-                          DateFormat('EEE MMMM d').format(date).toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 10),
-                        ),
-                      ],
-                    )),
+                    child: Column(children: [
+                      Row(
+                        children: [
+                          const Text(
+                            "Moodl levels",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 18),
+                          ),
+                          const Spacer(),
+                          Text(
+                            singleDay
+                                ? DateFormat('EEE MMMM d')
+                                    .format(start)
+                                    .toString()
+                                : "${DateFormat('EEE MMMM d').format(start)} - ${DateFormat('EEE MMMM d').format(end)}",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 10),
+                          ),
+                        ],
+                      ),
+                      if (data.isEmpty)
+                        Row(children: const [
+                          Text(
+                            "No data found",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 14,
+                                color: Colors.red),
+                          )
+                        ]),
+                    ])),
                 SizedBox(
                   height: 180,
                   child: charts.TimeSeriesChart(
@@ -134,16 +145,20 @@ class _MoodChartState extends State<MoodChart> {
                     primaryMeasureAxis: charts.NumericAxisSpec(
                         tickProviderSpec: charts.StaticNumericTickProviderSpec(
                             _createPrimaryTickSpec())),
-                    domainAxis: charts.DateTimeAxisSpec(
-                        tickFormatterSpec:
-                            const charts.AutoDateTimeTickFormatterSpec(
-                          day: charts.TimeFormatterSpec(
-                              format: 'hh',
-                              transitionFormat: 'hh',
-                              noonFormat: 'hh'),
-                        ),
-                        tickProviderSpec: charts.StaticDateTimeTickProviderSpec(
-                            _createDomainTickSpec())),
+                    domainAxis: singleDay
+                        ? charts.DateTimeAxisSpec(
+                            tickProviderSpec:
+                                charts.StaticDateTimeTickProviderSpec(
+                                    _createSingleDayDomainTickSpec()))
+                        : const charts.DateTimeAxisSpec(
+                            tickFormatterSpec:
+                                charts.AutoDateTimeTickFormatterSpec(
+                              day: charts.TimeFormatterSpec(
+                                format: 'dd MMM',
+                                transitionFormat: 'dd MMM',
+                              ),
+                            ),
+                          ),
                     defaultRenderer: charts.BarRendererConfig<DateTime>(
                       maxBarWidthPx: 8,
                       groupingType: charts.BarGroupingType.grouped,

@@ -68,8 +68,8 @@ class BleutoothSettingsScreen extends StatelessWidget {
                       color: Colors.black,
                       onPressed: () => bluetoothProvider.scan(),
                       icon: bluetoothProvider.isScanning
-                          ? Icon(Icons.bluetooth_searching)
-                          : Icon(Icons.bluetooth),
+                          ? const Icon(Icons.bluetooth_searching)
+                          : const Icon(Icons.bluetooth),
                     ),
                   ],
                 )),
