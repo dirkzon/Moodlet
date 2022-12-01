@@ -1,3 +1,4 @@
+import 'package:bletest/pages/settings_page/design_settings_screen.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class _SettingsState extends State<SettingsScreen> {
       body: Column(
         children: [
           AppBar(
+            backgroundColor: Colors.transparent,
             title: const Text('Settings'),
           ),
           TextButton(
@@ -27,7 +29,10 @@ class _SettingsState extends State<SettingsScreen> {
                 children: const [Text('Journal'), Spacer(), Text('>')],
               )),
           TextButton(
-              onPressed: () {},
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: ((context) => const DesignSettingsScreen()))),
               child: Row(
                 children: const [Text('Design'), Spacer(), Text('>')],
               )),

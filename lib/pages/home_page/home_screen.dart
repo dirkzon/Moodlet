@@ -24,18 +24,17 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Column(
       children: [
         AppBar(
-            backgroundColor: const Color.fromARGB(25, 244, 119, 24),
             title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
-                  Text(
-                    'Hello, Vine',
-                  ),
-                  Text(
-                    'Nice to see you again!',
-                    style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
-                  ),
-                ])),
+              Text(
+                'Hello, Vine',
+              ),
+              Text(
+                'Nice to see you again!',
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
+              ),
+            ])),
         const Spacer(),
         const MoodChart(),
         Container(

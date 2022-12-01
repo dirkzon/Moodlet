@@ -1,7 +1,8 @@
+import 'package:bletest/settings/settings_manager.dart';
 import 'package:flutter/material.dart';
 
-mixin ThemeConfig {
-  static config() {
+class ThemeConfig {
+  static config(SettingsManager manager) {
     return ThemeData(
         //font
         fontFamily: 'plus-jakarta-sans',
@@ -23,18 +24,18 @@ mixin ThemeConfig {
             bodyMedium:
                 TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal)),
         //colors
-        colorScheme: const ColorScheme(
-            brightness: Brightness.light,
-            primary: Color(0xffF47918),
-            onPrimary: Color(0xffFFFFFF),
-            secondary: Color(0xff754DD1),
-            onSecondary: Color(0xffFFFFFF),
-            error: Color(0xffCA681C),
-            onError: Color(0xffFFFFFF),
-            background: Color(0xff5C5C5C),
-            onBackground: Color(0xff5C5C5C),
-            surface: Color(0xffFFFFFF),
-            onSurface: Color(0xff000000)),
+        colorScheme: ColorScheme(
+            brightness: manager.darkMode ? Brightness.dark : Brightness.light,
+            primary: const Color(0xffF47918),
+            onPrimary: const Color(0xffFFFFFF),
+            secondary: const Color(0xff754DD1),
+            onSecondary: const Color(0xffFFFFFF),
+            error: const Color(0xffCA681C),
+            onError: const Color(0xffFFFFFF),
+            background: const Color(0xff5C5C5C),
+            onBackground: const Color(0xff5C5C5C),
+            surface: const Color(0xffFFFFFF),
+            onSurface: const Color(0xff000000)),
 
         // buttons
         buttonTheme: const ButtonThemeData(
@@ -70,13 +71,19 @@ mixin ThemeConfig {
                 padding: MaterialStateProperty.all(const EdgeInsets.all(24.0)),
                 textStyle: MaterialStateProperty.all(const TextStyle(
                     fontSize: 16.0, fontWeight: FontWeight.w400)))),
-        appBarTheme: const AppBarTheme(
+
+        //app bar
+        appBarTheme: AppBarTheme(
             titleTextStyle: TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.w600,
-                color: Colors.black),
+                color: manager.darkMode ? Colors.white : Colors.black),
             toolbarHeight: 150,
-            color: Colors.transparent,
-            shadowColor: Colors.transparent));
+            color: manager.darkMode
+                ? const Color.fromARGB(211, 156, 74, 11)
+                : const Color.fromARGB(25, 244, 119, 24),
+            shadowColor: Colors.transparent,
+            iconTheme: IconThemeData(
+                color: manager.darkMode ? Colors.white : Colors.black)));
   }
 }
