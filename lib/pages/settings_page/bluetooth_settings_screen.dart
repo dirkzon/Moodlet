@@ -21,88 +21,83 @@ class BleutoothSettingsScreen extends StatelessWidget {
           ),
           iconTheme: const IconThemeData(color: Colors.black),
         ),
-        body: CustomScrollView(slivers: [
-          SliverFillRemaining(
-              hasScrollBody: false,
-              child: Column(
-                children: [
-                  Container(
-                      margin: const EdgeInsets.all(24),
-                      child: Row(
-                        children: const [
-                          Text(
-                            'Connected device',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      )),
-                  if (sensorProvidor.connected)
-                    Container(
-                        padding: const EdgeInsets.all(24),
-                        child: Row(
-                          children: [
-                            Text(
-                              "${sensorProvidor.sensor.baterryLevel} % ",
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            Text(sensorProvidor.sensor.name),
-                            const Spacer(),
-                            IconButton(
-                                onPressed: () => bluetoothProvider.disconnect(),
-                                icon: const Icon(Icons.close))
-                          ],
-                        )),
-                  Container(
-                      margin: const EdgeInsets.all(24),
-                      child: Row(
-                        children: [
-                          const Text(
-                            'Find Devices',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const Spacer(),
-                          IconButton(
-                            color: Colors.black,
-                            onPressed: () => bluetoothProvider.scan(),
-                            icon: bluetoothProvider.isScanning
-                                ? const Icon(Icons.bluetooth_searching)
-                                : const Icon(Icons.bluetooth),
-                          ),
-                        ],
-                      )),
-                  Expanded(
-                      child: ListView.builder(
-                          itemCount: bluetoothProvider.availableDevices
-                              .where((d) => !d.connected)
-                              .length,
-                          itemBuilder: ((context, index) {
-                            var devices = bluetoothProvider.availableDevices
-                                .where((d) => !d.connected);
-                            if (devices.isEmpty) {
-                              return const Text('no devices found');
-                            }
-                            var device = devices.toList()[index];
-                            return ListTile(
-                              title: Text(device.device.name),
-                              trailing: TextButton(
-                                style: ButtonStyle(
-                                    padding: MaterialStateProperty.all(
-                                        const EdgeInsets.all(0.0))),
-                                onPressed: () =>
-                                    bluetoothProvider.connect(device.device.id),
-                                child: const Text('connect'),
-                              ),
-                            );
-                          })))
-                ],
-              ))
-        ]));
+        body: Column(
+          children: [
+            Container(
+                margin: const EdgeInsets.all(24),
+                child: Row(
+                  children: const [
+                    Text(
+                      'Connected device',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                )),
+            if (sensorProvidor.connected)
+              Container(
+                  padding: const EdgeInsets.all(24),
+                  child: Row(
+                    children: [
+                      Text(
+                        "${sensorProvidor.sensor.baterryLevel} % ",
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(sensorProvidor.sensor.name),
+                      const Spacer(),
+                      IconButton(
+                          onPressed: () => bluetoothProvider.disconnect(),
+                          icon: const Icon(Icons.close))
+                    ],
+                  )),
+            Container(
+                margin: const EdgeInsets.all(24),
+                child: Row(
+                  children: [
+                    const Text(
+                      'Find Devices',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      color: Colors.black,
+                      onPressed: () => bluetoothProvider.scan(),
+                      icon: bluetoothProvider.isScanning
+                          ? const Icon(Icons.bluetooth_searching)
+                          : const Icon(Icons.bluetooth),
+                    ),
+                  ],
+                )),
+            Expanded(
+                child: ListView.builder(
+                    itemCount: bluetoothProvider.availableDevices
+                        .where((d) => !d.connected)
+                        .length,
+                    itemBuilder: ((context, index) {
+                      var devices = bluetoothProvider.availableDevices
+                          .where((d) => !d.connected);
+                      if (devices.isEmpty) {
+                        return const Text('no devices found');
+                      }
+                      var device = devices.toList()[index];
+                      return ListTile(
+                        title: Text(device.device.name),
+                        trailing: TextButton(
+                          style: ButtonStyle(
+                              padding: MaterialStateProperty.all(
+                                  const EdgeInsets.all(0.0))),
+                          onPressed: () =>
+                              bluetoothProvider.connect(device.device.id),
+                          child: const Text('connect'),
+                        ),
+                      );
+                    })))
+          ],
+        ));
   }
 }
