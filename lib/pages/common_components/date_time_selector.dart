@@ -46,7 +46,6 @@ class _DateTimeSelectorState extends State<DateTimeSelector> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(25.5),
       child: Row(
         children: [
           InkWell(
@@ -59,7 +58,7 @@ class _DateTimeSelectorState extends State<DateTimeSelector> {
                 _updateDate(date);
               },
               child: Container(
-                width: widget.useTime ? 210 : 230,
+                width: widget.useTime ? 160 : 230,
                 decoration: boxDecoration,
                 padding: const EdgeInsets.only(
                     left: 11.0, right: 11.0, top: 4.0, bottom: 4.0),
@@ -77,7 +76,7 @@ class _DateTimeSelectorState extends State<DateTimeSelector> {
                   ],
                 ),
               )),
-          const Spacer(),
+          const SizedBox(width: 8),
           if (widget.useTime)
             InkWell(
                 onTap: () async {
