@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DateTimeSelector extends StatefulWidget {
-  const DateTimeSelector({super.key});
+  final bool useTime;
+  final ValueChanged<DateTime?>? onChanged;
+
+  const DateTimeSelector({super.key, required this.useTime, this.onChanged});
 
   @override
   _DateTimeSelectorState createState() => _DateTimeSelectorState();
 }
 
 class _DateTimeSelectorState extends State<DateTimeSelector> {
+  late DateTime _selectedDateTime = DateTime.now();
+
   final TextStyle textStyle =
       const TextStyle(fontSize: 22, fontWeight: FontWeight.w400);
 
@@ -16,13 +21,14 @@ class _DateTimeSelectorState extends State<DateTimeSelector> {
       color: const Color.fromARGB(31, 118, 118, 128),
       borderRadius: BorderRadius.circular(6.0));
 
-  DateTime _selectedDateTime = DateTime.now();
-
-  void _updateDate(DateTime date) {
+  void _updateDate(DateTime newdate) {
+    DateTime date = widget.useTime
+        ? newdate
+        : DateTime(newdate.year, newdate.month, newdate.day);
     setState(() {
-      _selectedDateTime = DateTime(date.year, date.month, date.day,
-          _selectedDateTime.hour, _selectedDateTime.minute);
+      _selectedDateTime = date;
     });
+    widget.onChanged!(_selectedDateTime);
   }
 
   void _updateTime(TimeOfDay time) {
@@ -34,6 +40,7 @@ class _DateTimeSelectorState extends State<DateTimeSelector> {
           time.hour,
           time.minute);
     });
+    widget.onChanged!(_selectedDateTime);
   }
 
   @override
@@ -52,7 +59,7 @@ class _DateTimeSelectorState extends State<DateTimeSelector> {
                 _updateDate(date);
               },
               child: Container(
-                width: 210,
+                width: widget.useTime ? 210 : 230,
                 decoration: boxDecoration,
                 padding: const EdgeInsets.only(
                     left: 11.0, right: 11.0, top: 4.0, bottom: 4.0),
@@ -71,26 +78,27 @@ class _DateTimeSelectorState extends State<DateTimeSelector> {
                 ),
               )),
           const Spacer(),
-          InkWell(
-              onTap: () async {
-                TimeOfDay? time = await showTimePicker(
-                    context: context,
-                    initialTime: TimeOfDay(
-                        hour: _selectedDateTime.hour,
-                        minute: _selectedDateTime.minute),
-                    initialEntryMode: TimePickerEntryMode.input);
-                if (time == null) return;
-                _updateTime(time);
-              },
-              child: Container(
-                  width: 100,
-                  decoration: boxDecoration,
-                  padding: const EdgeInsets.all(4.0),
-                  child: Center(
-                    child: Text(
-                        "${_selectedDateTime.hour} : ${_selectedDateTime.minute.toString().padLeft(2, '0')}",
-                        style: textStyle),
-                  )))
+          if (widget.useTime)
+            InkWell(
+                onTap: () async {
+                  TimeOfDay? time = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay(
+                          hour: _selectedDateTime.hour,
+                          minute: _selectedDateTime.minute),
+                      initialEntryMode: TimePickerEntryMode.input);
+                  if (time == null) return;
+                  _updateTime(time);
+                },
+                child: Container(
+                    width: 100,
+                    decoration: boxDecoration,
+                    padding: const EdgeInsets.all(4.0),
+                    child: Center(
+                      child: Text(
+                          "${_selectedDateTime.hour} : ${_selectedDateTime.minute.toString().padLeft(2, '0')}",
+                          style: textStyle),
+                    )))
         ],
       ),
     );
