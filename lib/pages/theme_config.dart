@@ -57,11 +57,13 @@ class ThemeConfig {
       ),
 
       //chips
-      chipTheme: const ChipThemeData(
-        backgroundColor: Color(0xffF47918),
-        labelStyle: TextStyle(color: Colors.white),
-        iconTheme: IconThemeData(color: Colors.white),
+      chipTheme: ChipThemeData(
+        backgroundColor: const Color(0xffF47918),
+        labelStyle: const TextStyle(
+            color: Colors.white, fontWeight: FontWeight.w400, fontSize: 16),
+        iconTheme: const IconThemeData(color: Colors.white),
         deleteIconColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
 
       //text button

@@ -129,16 +129,17 @@ class MoodChart extends StatelessWidget {
                 ])),
             SizedBox(
               height: 180,
+              width: 400,
               child: charts.TimeSeriesChart(
                 _getData(),
                 animate: true,
                 animationDuration: const Duration(milliseconds: 750),
-                behaviors: [
-                  charts.PanAndZoomBehavior(),
-                  charts.SlidingViewport(
-                    charts.SelectionModelType.action,
-                  ),
-                ],
+                // behaviors: [
+                //   charts.PanAndZoomBehavior(),
+                //   charts.SlidingViewport(
+                //     charts.SelectionModelType.action,
+                //   ),
+                // ],
                 primaryMeasureAxis: charts.NumericAxisSpec(
                     tickProviderSpec: charts.StaticNumericTickProviderSpec(
                         _createPrimaryTickSpec())),
@@ -149,8 +150,8 @@ class MoodChart extends StatelessWidget {
                     : const charts.DateTimeAxisSpec(
                         tickFormatterSpec: charts.AutoDateTimeTickFormatterSpec(
                           day: charts.TimeFormatterSpec(
-                            format: 'dd MMM',
-                            transitionFormat: 'dd MMM',
+                            format: 'ddd',
+                            transitionFormat: 'ddd',
                           ),
                         ),
                       ),

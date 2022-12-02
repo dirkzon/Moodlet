@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../comms/hive/adaptors/hiveEntryRepository.dart';
-import '../../comms/hive/models/hiveEntry.dart';
 import '../common_components/chart.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -44,11 +43,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ])),
         const Spacer(),
-        // MoodChart(
-        //     entry.getEntries(
-        //         DateTime.parse("2022-10-13"), DateTime.parse("2022-10-14")),
-        //     DateTime.parse("2022-10-13"),
-        //     (DateTime.parse("2022-10-14"))),
         Container(
           color: const Color.fromARGB(25, 244, 119, 24),
           child: MoodChart(
@@ -72,11 +66,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         const Spacer(),
-        // Chip(
-        //   label: const Text('test'),
-        //   deleteIcon: const Icon(Icons.close),
-        //   onDeleted: () => print('deleted'),
-        // ),
+        Chip(
+          label: const Text('work'),
+          deleteIcon: const Icon(Icons.close),
+          onDeleted: () => print('deleted'),
+        ),
         // SizedBox(width: 340, child: TextFormField()),
         // SizedBox(
         //     width: 340,
