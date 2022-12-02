@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../comms/hive/adaptors/hiveEntryRepository.dart';
 import '../common_components/chart.dart';
+import '../common_components/date_time_selector.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,14 +13,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool _switchValue = false;
-
-  void _updateSwitch(bool value) {
-    setState(() {
-      _switchValue = value;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     DateTime start = DateTime.now();
@@ -70,17 +63,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const Spacer(),
-              Chip(
-                label: const Text('work'),
-                deleteIcon: const Icon(Icons.close),
-                onDeleted: () => print('deleted'),
-              ),
+              // Chip(
+              //   label: const Text('work'),
+              //   deleteIcon: const Icon(Icons.close),
+              //   onDeleted: () => print('deleted'),
+              // ),
               // SizedBox(width: 340, child: TextFormField()),
-              // SizedBox(
-              //     width: 340,
-              //     child: DropdownButtonFormField(items: [], onChanged: (obj) {})),
-              // CupertinoSwitch(value: _switchValue, onChanged: _updateSwitch),
-              // const DateTimeSelector(),
+              // DateTimeSelector(
+              //   useTime: true,
+              //   onChanged: (value) => print(value),
+              // ),
             ],
           ))
     ]));
