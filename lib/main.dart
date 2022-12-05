@@ -1,5 +1,6 @@
 import 'package:bletest/comms/hive/adaptors/hiveEntryRepository.dart';
 import 'package:bletest/comms/hive/hiveConfig.dart';
+import 'package:bletest/moment/moment_manager.dart';
 import 'package:bletest/pages/navigation_page.dart';
 import 'package:bletest/pages/theme_config.dart';
 import 'package:bletest/sensor/moodmetric_sensor_manager.dart';
@@ -21,6 +22,9 @@ class MoodlApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider<SettingsManager>(
             create: (context) => SettingsManager(),
+          ),
+          ChangeNotifierProvider<MomentManager>(
+            create: (context) => MomentManager(),
           ),
           ChangeNotifierProvider<BluetoothManager>(
             create: (context) => BluetoothManager(),

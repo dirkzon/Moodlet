@@ -1,3 +1,5 @@
+import 'package:bletest/moment/moment_manager.dart';
+import 'package:bletest/pages/moment/add_feeling_to_moment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,6 +10,8 @@ class AddMomentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MomentManager manager = Provider.of<MomentManager>(context);
+
     return Scaffold(
         appBar: AppBar(
             title: Column(
@@ -37,18 +41,21 @@ class AddMomentScreen extends StatelessWidget {
                             style: TextStyle(
                                 fontWeight: FontWeight.w400, fontSize: 12),
                           ),
+                          SizedBox(height: 6),
                           SizedBox(
                               width: 340,
                               child: TextField(
+                                onChanged: (value) => manager.setName(value),
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: 10.0, horizontal: 10.0),
                                     hintText: 'F.e. meeting at work'),
                               )),
-                          SizedBox(height: 10),
+                          SizedBox(height: 12),
                           Text('Where did it happen?',
                               style: TextStyle(
                                   fontWeight: FontWeight.w400, fontSize: 12)),
+                          SizedBox(height: 6),
                           SizedBox(
                               width: 340,
                               child: TextField(
@@ -58,10 +65,11 @@ class AddMomentScreen extends StatelessWidget {
                                       vertical: 10.0, horizontal: 10.0),
                                 ),
                               )),
-                          SizedBox(height: 10),
+                          SizedBox(height: 12),
                           Text('Add an icon to your moment',
                               style: TextStyle(
                                   fontWeight: FontWeight.w400, fontSize: 12)),
+                          SizedBox(height: 6),
                           SizedBox(
                               width: 340,
                               child: TextField(
@@ -71,10 +79,11 @@ class AddMomentScreen extends StatelessWidget {
                                       vertical: 10.0, horizontal: 10.0),
                                 ),
                               )),
-                          SizedBox(height: 10),
+                          SizedBox(height: 12),
                           Text('When did this happen?',
                               style: TextStyle(
                                   fontWeight: FontWeight.w400, fontSize: 12)),
+                          SizedBox(height: 6),
                           SizedBox(
                               width: 340,
                               child: Row(children: [
@@ -85,7 +94,7 @@ class AddMomentScreen extends StatelessWidget {
                                   onChanged: (value) => print(value),
                                 )
                               ])),
-                          SizedBox(height: 10),
+                          SizedBox(height: 12),
                           SizedBox(
                               width: 340,
                               child: Row(children: [
@@ -96,18 +105,26 @@ class AddMomentScreen extends StatelessWidget {
                                   onChanged: (value) => print(value),
                                 )
                               ])),
-                          Container(
-                            alignment: Alignment.bottomCenter,
-                            margin: const EdgeInsets.all(24.0),
-                            child: ElevatedButton(
-                              onPressed: () => {},
-                              child: const Text('Next'),
-                            ),
-                          ),
                         ],
                       )),
                 ],
               ))
-        ]));
+        ]),
+        bottomSheet: Container(
+          margin: const EdgeInsets.all(24.0),
+          child: SizedBox(
+            width: 340,
+            child: ElevatedButton(
+              onPressed: () => {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) =>
+                            const AddFeelingToMomentScreen()))),
+              },
+              child: const Text('Next'),
+            ),
+          ),
+        ));
   }
 }
