@@ -1,3 +1,4 @@
+import 'package:bletest/pages/moment/add_moment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -58,7 +59,10 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 margin: const EdgeInsets.all(24.0),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: ((context) => const AddMomentScreen()))),
                   child: const Text('Capture Moment'),
                 ),
               ),
