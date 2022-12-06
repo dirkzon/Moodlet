@@ -44,8 +44,9 @@ class AddMomentScreen extends StatelessWidget {
                           SizedBox(height: 6),
                           SizedBox(
                               width: 340,
-                              child: TextField(
+                              child: TextFormField(
                                 onChanged: (value) => manager.setName(value),
+                                initialValue: manager.name,
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: 10.0, horizontal: 10.0),
@@ -58,7 +59,10 @@ class AddMomentScreen extends StatelessWidget {
                           SizedBox(height: 6),
                           SizedBox(
                               width: 340,
-                              child: TextField(
+                              child: TextFormField(
+                                onChanged: (value) =>
+                                    manager.setLocation(value),
+                                initialValue: manager.location,
                                 decoration: InputDecoration(
                                   hintText: 'F.e. Eindhoven',
                                   contentPadding: EdgeInsets.symmetric(
@@ -72,7 +76,7 @@ class AddMomentScreen extends StatelessWidget {
                           SizedBox(height: 6),
                           SizedBox(
                               width: 340,
-                              child: TextField(
+                              child: TextFormField(
                                 decoration: InputDecoration(
                                   hintText: 'Search',
                                   contentPadding: EdgeInsets.symmetric(
@@ -102,7 +106,8 @@ class AddMomentScreen extends StatelessWidget {
                                 Spacer(),
                                 DateTimeSelector(
                                   useTime: true,
-                                  onChanged: (value) => print(value),
+                                  onChanged: (value) =>
+                                      manager.setEndDate(value!),
                                 )
                               ])),
                         ],
