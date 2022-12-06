@@ -4,15 +4,20 @@ import 'package:intl/intl.dart';
 class DateTimeSelector extends StatefulWidget {
   final bool useTime;
   final ValueChanged<DateTime?>? onChanged;
+  final DateTime initialValue;
 
-  const DateTimeSelector({super.key, required this.useTime, this.onChanged});
+  const DateTimeSelector(
+      {super.key,
+      required this.useTime,
+      this.onChanged,
+      required this.initialValue});
 
   @override
   _DateTimeSelectorState createState() => _DateTimeSelectorState();
 }
 
 class _DateTimeSelectorState extends State<DateTimeSelector> {
-  late DateTime _selectedDateTime = DateTime.now();
+  late DateTime _selectedDateTime = widget.initialValue ?? DateTime.now();
 
   final TextStyle textStyle =
       const TextStyle(fontSize: 22, fontWeight: FontWeight.w400);

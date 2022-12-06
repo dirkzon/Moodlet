@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../comms/hive/adaptors/hiveEntryRepository.dart';
+import '../../comms/hive/adaptors/hiveMomentRepository.dart';
 import '../common_components/chart.dart';
+import '../moment/add_moment_screen.dart';
 
 class JournalScreen extends StatefulWidget {
   const JournalScreen({super.key});
@@ -14,9 +16,12 @@ class JournalScreen extends StatefulWidget {
 class _JournalScreenState extends State<JournalScreen> {
   DateTime start = DateTime.now();
   DateTime end = DateTime.now().add(const Duration(days: 1));
+
   @override
   Widget build(BuildContext context) {
     HiveEntryRepository entry = Provider.of<HiveEntryRepository>(context);
+    HiveMomentRepository repository =
+        Provider.of<HiveMomentRepository>(context);
 
     return Scaffold(
         body: CustomScrollView(slivers: [
@@ -54,10 +59,18 @@ class _JournalScreenState extends State<JournalScreen> {
                   ),
                 ),
               ),
+              Text(repository
+                  .getMoments(DateTime.now().subtract(const Duration(days: 7)),
+                      DateTime.now().add(const Duration(days: 7)))
+                  .length
+                  .toString()),
               Container(
                 margin: const EdgeInsets.all(24.0),
                 child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: ((context) => const AddMomentScreen()))),
                     child: Row(
                       children: const [
                         Text('Capture a new moment',

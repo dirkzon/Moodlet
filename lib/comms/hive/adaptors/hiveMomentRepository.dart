@@ -9,10 +9,9 @@ class HiveMomentRepository with ChangeNotifier {
   List<HiveMoment> getMoments(DateTime from, DateTime to) {
     List<HiveMoment> values = box.values
         .where((HiveMoment moment) =>
-            moment.startDate?.millisecondsSinceEpoch >
+            moment.startDate.millisecondsSinceEpoch >
                 from.millisecondsSinceEpoch &&
-            moment.startDate?.millisecondsSinceEpoch <
-                to.millisecondsSinceEpoch)
+            moment.startDate.millisecondsSinceEpoch < to.millisecondsSinceEpoch)
         .toList();
     return values.isEmpty ? [] : values;
   }
@@ -23,6 +22,6 @@ class HiveMomentRepository with ChangeNotifier {
   }
 
   saveMoment(HiveMoment moment) {
-    box.put(const Uuid(), moment);
+    box.put(const Uuid().toString(), moment);
   }
 }

@@ -3,24 +3,10 @@ import 'package:bletest/pages/moment/add_notes_to_moment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-enum Pleasure { unpleasant, unsatisfied, neutral, pleased, pleasant }
+import '../../moment/momentEnums.dart';
 
-enum Arousal { calm, dull, neutral, wideAwake, excited }
-
-enum Dominance { independent, powerful, neutral, powerlessness, dependent }
-
-class AddFeelingToMomentScreen extends StatefulWidget {
+class AddFeelingToMomentScreen extends StatelessWidget {
   const AddFeelingToMomentScreen({super.key});
-
-  @override
-  _AddFeelingToMomentScreenState createState() =>
-      _AddFeelingToMomentScreenState();
-}
-
-class _AddFeelingToMomentScreenState extends State<AddFeelingToMomentScreen> {
-  Pleasure? _pleasure = Pleasure.neutral;
-  Arousal? _arousal = Arousal.neutral;
-  Dominance? _dominance = Dominance.neutral;
 
   @override
   Widget build(BuildContext context) {
@@ -28,17 +14,30 @@ class _AddFeelingToMomentScreenState extends State<AddFeelingToMomentScreen> {
 
     return Scaffold(
         appBar: AppBar(
-            title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-              Text(
-                'Capture moment',
+          title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  'Capture moment',
+                ),
+                Text(
+                  'How did you feel?',
+                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
+                ),
+              ]),
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.close,
+                color: Colors.black,
               ),
-              Text(
-                'How did you feel?',
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
-              ),
-            ])),
+              onPressed: () {
+                Navigator.of(context).popUntil((route) => route.isFirst);
+                // do something
+              },
+            )
+          ],
+        ),
         body: CustomScrollView(slivers: [
           SliverFillRemaining(
               hasScrollBody: false,
@@ -60,11 +59,9 @@ class _AddFeelingToMomentScreenState extends State<AddFeelingToMomentScreen> {
                             children: Pleasure.values
                                 .map((e) => Radio(
                                     value: e,
-                                    groupValue: _pleasure,
+                                    groupValue: manager.pleasure,
                                     onChanged: (Pleasure? value) {
-                                      setState(() {
-                                        _pleasure = value;
-                                      });
+                                      manager.setPleasure(value!);
                                     }))
                                 .toList()),
                         Image.asset('assets/arousal.png'),
@@ -73,11 +70,9 @@ class _AddFeelingToMomentScreenState extends State<AddFeelingToMomentScreen> {
                             children: Arousal.values
                                 .map((e) => Radio(
                                     value: e,
-                                    groupValue: _arousal,
+                                    groupValue: manager.arousal,
                                     onChanged: (Arousal? value) {
-                                      setState(() {
-                                        _arousal = value;
-                                      });
+                                      manager.setArousal(value!);
                                     }))
                                 .toList()),
                         Image.asset('assets/dominance.png'),
@@ -86,11 +81,9 @@ class _AddFeelingToMomentScreenState extends State<AddFeelingToMomentScreen> {
                             children: Dominance.values
                                 .map((e) => Radio(
                                     value: e,
-                                    groupValue: _dominance,
+                                    groupValue: manager.dominance,
                                     onChanged: (Dominance? value) {
-                                      setState(() {
-                                        _dominance = value;
-                                      });
+                                      manager.setDominance(value!);
                                     }))
                                 .toList()),
                       ],
@@ -99,18 +92,14 @@ class _AddFeelingToMomentScreenState extends State<AddFeelingToMomentScreen> {
         ]),
         bottomSheet: Container(
           margin: const EdgeInsets.all(24.0),
-          child: SizedBox(
-            width: 340,
-            child: ElevatedButton(
-              onPressed: () => {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: ((context) =>
-                            const AddNotesToMomentScreen()))),
-              },
-              child: const Text('Next'),
-            ),
+          child: ElevatedButton(
+            onPressed: () => {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: ((context) => const AddNotesToMomentScreen()))),
+            },
+            child: Row(children: [Spacer(), const Text('Next'), Spacer()]),
           ),
         ));
   }

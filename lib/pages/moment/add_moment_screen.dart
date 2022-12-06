@@ -13,18 +13,32 @@ class AddMomentScreen extends StatelessWidget {
     MomentManager manager = Provider.of<MomentManager>(context);
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
-            title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-              Text(
-                'Capture moment',
+          title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  'Capture moment',
+                ),
+                Text(
+                  'Tell me what happened.',
+                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
+                ),
+              ]),
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.close,
+                color: Colors.black,
               ),
-              Text(
-                'Tell me what happened.',
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
-              ),
-            ])),
+              onPressed: () {
+                Navigator.of(context).popUntil((route) => route.isFirst);
+                // do something
+              },
+            )
+          ],
+        ),
         body: CustomScrollView(slivers: [
           SliverFillRemaining(
               hasScrollBody: false,
@@ -77,6 +91,7 @@ class AddMomentScreen extends StatelessWidget {
                           SizedBox(
                               width: 340,
                               child: TextFormField(
+                                enabled: false,
                                 decoration: InputDecoration(
                                   hintText: 'Search',
                                   contentPadding: EdgeInsets.symmetric(
@@ -94,8 +109,10 @@ class AddMomentScreen extends StatelessWidget {
                                 Text('Start'),
                                 Spacer(),
                                 DateTimeSelector(
+                                  initialValue: manager.startDate,
                                   useTime: true,
-                                  onChanged: (value) => print(value),
+                                  onChanged: (value) =>
+                                      manager.setStartDate(value!),
                                 )
                               ])),
                           SizedBox(height: 12),
@@ -105,6 +122,7 @@ class AddMomentScreen extends StatelessWidget {
                                 Text('End'),
                                 Spacer(),
                                 DateTimeSelector(
+                                  initialValue: manager.endDate,
                                   useTime: true,
                                   onChanged: (value) =>
                                       manager.setEndDate(value!),
@@ -117,18 +135,15 @@ class AddMomentScreen extends StatelessWidget {
         ]),
         bottomSheet: Container(
           margin: const EdgeInsets.all(24.0),
-          child: SizedBox(
-            width: 340,
-            child: ElevatedButton(
-              onPressed: () => {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: ((context) =>
-                            const AddFeelingToMomentScreen()))),
-              },
-              child: const Text('Next'),
-            ),
+          child: ElevatedButton(
+            onPressed: () => {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: ((context) =>
+                          const AddFeelingToMomentScreen()))),
+            },
+            child: Row(children: [Spacer(), const Text('Next'), Spacer()]),
           ),
         ));
   }
