@@ -28,7 +28,7 @@ class MoodChart extends StatelessWidget {
             date.year, date.month, date.day, date.hour, date.minute);
       }
       if (duration.inDays > 1) {
-        return DateTime(date.year, date.month, date.day, date.hour);
+        return DateTime(date.year, date.month, date.day);
       }
       if (duration.inDays > 6) {
         return DateTime(date.year, date.month, date.day);
@@ -85,6 +85,15 @@ class MoodChart extends StatelessWidget {
     ];
   }
 
+  List<charts.TickSpec<DateTime>> _createMultidayDomainTickSpec() {
+    List<charts.TickSpec<DateTime>> output = [];
+    for (var i = 0; i < duration.inDays; i += duration.inDays <= 7 ? 1 : 2) {
+      DateTime date = start.add(Duration(days: i));
+      output.add(charts.TickSpec(date, label: DateFormat('d').format(date)));
+    }
+    return output;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -134,27 +143,14 @@ class MoodChart extends StatelessWidget {
                 _getData(),
                 animate: true,
                 animationDuration: const Duration(milliseconds: 750),
-                // behaviors: [
-                //   charts.PanAndZoomBehavior(),
-                //   charts.SlidingViewport(
-                //     charts.SelectionModelType.action,
-                //   ),
-                // ],
                 primaryMeasureAxis: charts.NumericAxisSpec(
                     tickProviderSpec: charts.StaticNumericTickProviderSpec(
                         _createPrimaryTickSpec())),
-                domainAxis: singleDay
-                    ? charts.DateTimeAxisSpec(
-                        tickProviderSpec: charts.StaticDateTimeTickProviderSpec(
-                            _createSingleDayDomainTickSpec()))
-                    : const charts.DateTimeAxisSpec(
-                        tickFormatterSpec: charts.AutoDateTimeTickFormatterSpec(
-                          day: charts.TimeFormatterSpec(
-                            format: 'ddd',
-                            transitionFormat: 'ddd',
-                          ),
-                        ),
-                      ),
+                domainAxis: charts.DateTimeAxisSpec(
+                    tickProviderSpec: charts.StaticDateTimeTickProviderSpec(
+                        singleDay
+                            ? _createSingleDayDomainTickSpec()
+                            : _createMultidayDomainTickSpec())),
                 defaultRenderer: charts.BarRendererConfig<DateTime>(
                   maxBarWidthPx: 8,
                   groupingType: charts.BarGroupingType.grouped,
