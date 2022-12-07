@@ -46,7 +46,7 @@ class _MonthSelectorState extends State<MonthSelector> {
     return DropdownButton(
       value: months[selectedMonth],
       items: List.generate(
-          widget.currentMonth,
+          months.length,
           (x) => DropdownMenuItem(
               value: months[x],
               child: Text(

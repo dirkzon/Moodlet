@@ -31,13 +31,14 @@ class _JournalScreenState extends State<JournalScreen> {
     setState(() {
       start = DateTime(start.year, m, start.day);
       daysInMonth = DateUtils.getDaysInMonth(start.year, start.month);
+      _addTimeFrameToEnd();
     });
   }
 
   _setDay(int d) {
     setState(() {
       start = DateTime(start.year, start.month, d);
-      end = start.add(timeFrame);
+      _addTimeFrameToEnd();
     });
   }
 
@@ -46,15 +47,23 @@ class _JournalScreenState extends State<JournalScreen> {
       switch (t) {
         case "Day":
           timeFrame = const Duration(days: 1);
+          _addTimeFrameToEnd();
+
           break;
         case "Week":
           timeFrame = const Duration(days: 7);
+          _addTimeFrameToEnd();
           break;
         case "Month":
           timeFrame = Duration(days: daysInMonth);
+          _addTimeFrameToEnd();
           break;
       }
     });
+  }
+
+  _addTimeFrameToEnd() {
+    end = start.add(timeFrame);
   }
 
   @override
