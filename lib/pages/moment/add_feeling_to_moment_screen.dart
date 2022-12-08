@@ -10,28 +10,50 @@ class AddFeelingToMomentScreen extends StatelessWidget {
   const AddFeelingToMomentScreen({super.key});
 
   Widget _buildPopupDialog(BuildContext context) {
-    return new CupertinoAlertDialog(
-      title: const Text('Self Assessment Manikin (SAM)'),
-      actions: <Widget>[
-        new CupertinoButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text("Close",
-              // textAlign: TextAlign.center,
-              style:
-                  TextStyle(fontWeight: FontWeight.w600, color: Colors.grey)),
-        ),
-      ],
-      content: new Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-              "The Self-Assessment Mannequin (SAM) is a non-verbal pictorial appraisal strategy that measures your full-of-feeling response's joy, excitement, and dominance to a wide assortment of boosts."),
-        ],
-      ),
-    );
+    return new Container(
+        margin: EdgeInsets.symmetric(vertical: 12),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                new IconButton(
+                    onPressed: () => {Navigator.of(context).pop()},
+                    icon: Icon(Icons.close))
+              ],
+            ),
+            new Container(
+              padding: EdgeInsets.symmetric(horizontal: 24),
+              margin: EdgeInsets.symmetric(vertical: 12),
+              child: const Text(
+                textAlign: TextAlign.start,
+                'What are the emotion of the SAM represents?',
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 22),
+              ),
+            ),
+            new Container(
+              padding: EdgeInsets.symmetric(horizontal: 24),
+              child: new Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                      "The Self-Assessment Mannequin (SAM) is a non-verbal pictorial appraisal strategy that measures your full-of-feeling response's joy, excitement, and dominance to a wide assortment of boosts."),
+                ],
+              ),
+            ),
+            new TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Close",
+                  // textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w600, color: Colors.grey)),
+            ),
+          ],
+        ));
   }
 
   @override
@@ -87,11 +109,20 @@ class AddFeelingToMomentScreen extends StatelessWidget {
                             Spacer(),
                             IconButton(
                               onPressed: () => {
-                                showDialog(
+                                showModalBottomSheet(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: new BorderRadius.only(
+                                          topLeft: const Radius.circular(30),
+                                          topRight: const Radius.circular(30))),
                                   context: context,
                                   builder: (BuildContext context) =>
                                       _buildPopupDialog(context),
                                 )
+                                // showDialog(
+                                //   context: context,
+                                //   builder: (BuildContext context) =>
+                                //       _buildPopupDialog(context),
+                                // )
                               },
                               icon: Icon(Icons.info_outline),
                               color: Theme.of(context).colorScheme.primary,
