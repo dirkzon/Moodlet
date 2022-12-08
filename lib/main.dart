@@ -1,5 +1,6 @@
 import 'package:bletest/comms/hive/adaptors/hiveEntryRepository.dart';
 import 'package:bletest/comms/hive/hiveConfig.dart';
+import 'package:bletest/notifications/notification_service.dart';
 import 'package:bletest/pages/navigation_page.dart';
 import 'package:bletest/pages/theme_config.dart';
 import 'package:bletest/sensor/moodmetric_sensor_manager.dart';
@@ -12,7 +13,7 @@ import 'ble/bluetooth_manager.dart';
 
 void main() async {
   await HiveConfig.setUp();
-
+  await NotificationService().init();
   runApp(MoodlApp());
 }
 
