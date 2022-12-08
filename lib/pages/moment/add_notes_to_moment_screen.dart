@@ -74,21 +74,19 @@ class AddNotesToMomentScreen extends StatelessWidget {
                               color: Colors.grey),
                         ),
                         SizedBox(height: 6),
-                        SizedBox(
-                            width: 340,
-                            child: TextFormField(
-                              onChanged: (value) =>
-                                  manager.setAdditionalNotes(value),
-                              initialValue: manager.additionalNotes,
-                              minLines: 6,
-                              maxLines: 10,
-                              keyboardType: TextInputType.multiline,
-                              decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 10.0, horizontal: 10.0),
-                                  hintText:
-                                      'F.e. note what you liked and disliked'),
-                            )),
+                        TextFormField(
+                          onChanged: (value) =>
+                              manager.setAdditionalNotes(value),
+                          initialValue: manager.additionalNotes,
+                          minLines: 6,
+                          maxLines: 10,
+                          keyboardType: TextInputType.multiline,
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 10.0, horizontal: 10.0),
+                              hintText:
+                                  'F.e. note what you liked and disliked'),
+                        ),
                       ],
                     )),
               ],

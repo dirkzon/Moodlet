@@ -58,16 +58,14 @@ class AddMomentScreen extends StatelessWidget {
                                 color: Colors.grey),
                           ),
                           SizedBox(height: 6),
-                          SizedBox(
-                              width: 340,
-                              child: TextFormField(
-                                onChanged: (value) => manager.setName(value),
-                                initialValue: manager.name,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 10.0, horizontal: 10.0),
-                                    hintText: 'F.e. meeting at work'),
-                              )),
+                          TextFormField(
+                            onChanged: (value) => manager.setName(value),
+                            initialValue: manager.name,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 10.0),
+                                hintText: 'F.e. meeting at work'),
+                          ),
                           SizedBox(height: 12),
                           Text('Where did it happen?',
                               style: TextStyle(
@@ -75,18 +73,15 @@ class AddMomentScreen extends StatelessWidget {
                                   fontSize: 14,
                                   color: Colors.grey)),
                           SizedBox(height: 6),
-                          SizedBox(
-                              width: 340,
-                              child: TextFormField(
-                                onChanged: (value) =>
-                                    manager.setLocation(value),
-                                initialValue: manager.location,
-                                decoration: InputDecoration(
-                                  hintText: 'F.e. Eindhoven',
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 10.0, horizontal: 10.0),
-                                ),
-                              )),
+                          TextFormField(
+                            onChanged: (value) => manager.setLocation(value),
+                            initialValue: manager.location,
+                            decoration: InputDecoration(
+                              hintText: 'F.e. Eindhoven',
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 10.0, horizontal: 10.0),
+                            ),
+                          ),
                           SizedBox(height: 12),
                           Text('Add an icon to your moment',
                               style: TextStyle(
@@ -94,16 +89,14 @@ class AddMomentScreen extends StatelessWidget {
                                   fontSize: 14,
                                   color: Colors.grey)),
                           SizedBox(height: 6),
-                          SizedBox(
-                              width: 340,
-                              child: TextFormField(
-                                enabled: false,
-                                decoration: InputDecoration(
-                                  hintText: 'Search',
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 10.0, horizontal: 10.0),
-                                ),
-                              )),
+                          TextFormField(
+                            enabled: false,
+                            decoration: InputDecoration(
+                              hintText: 'Search',
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 10.0, horizontal: 10.0),
+                            ),
+                          ),
                           SizedBox(height: 12),
                           Text('When did this happen?',
                               style: TextStyle(
@@ -111,39 +104,34 @@ class AddMomentScreen extends StatelessWidget {
                                   fontSize: 14,
                                   color: Colors.grey)),
                           SizedBox(height: 6),
-                          SizedBox(
-                              width: 340,
-                              child: Row(children: [
-                                Text('Start',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.grey)),
-                                Spacer(),
-                                DateTimeSelector(
-                                  initialValue: manager.startDate,
-                                  useTime: true,
-                                  onChanged: (value) =>
-                                      manager.setStartDate(value!),
-                                )
-                              ])),
+                          Row(children: [
+                            Text('Start',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey)),
+                            Spacer(),
+                            DateTimeSelector(
+                              initialValue: manager.startDate,
+                              useTime: true,
+                              onChanged: (value) =>
+                                  manager.setStartDate(value!),
+                            )
+                          ]),
                           SizedBox(height: 12),
-                          SizedBox(
-                              width: 340,
-                              child: Row(children: [
-                                Text(
-                                  'End',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.grey),
-                                ),
-                                Spacer(),
-                                DateTimeSelector(
-                                  initialValue: manager.endDate,
-                                  useTime: true,
-                                  onChanged: (value) =>
-                                      manager.setEndDate(value!),
-                                )
-                              ])),
+                          Row(children: [
+                            Text(
+                              'End',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey),
+                            ),
+                            Spacer(),
+                            DateTimeSelector(
+                              initialValue: manager.endDate,
+                              useTime: true,
+                              onChanged: (value) => manager.setEndDate(value!),
+                            )
+                          ]),
                         ],
                       )),
                 ],
