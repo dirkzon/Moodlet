@@ -29,13 +29,13 @@ class HiveMoment extends HiveObject {
   String location;
 
   @HiveField(4)
-  Pleasure? pleasure;
+  int pleasure;
 
   @HiveField(5)
-  Arousal? arousal;
+  int arousal;
 
   @HiveField(6)
-  Dominance? dominance;
+  int dominance;
 
   @HiveField(7)
   String additionalNotes;

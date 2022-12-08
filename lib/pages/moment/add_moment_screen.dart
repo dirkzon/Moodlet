@@ -33,8 +33,8 @@ class AddMomentScreen extends StatelessWidget {
                 color: Colors.black,
               ),
               onPressed: () {
+                manager.clearMoment();
                 Navigator.of(context).popUntil((route) => route.isFirst);
-                // do something
               },
             )
           ],
@@ -53,7 +53,9 @@ class AddMomentScreen extends StatelessWidget {
                             'Give your moment a name',
                             textAlign: TextAlign.left,
                             style: TextStyle(
-                                fontWeight: FontWeight.w400, fontSize: 12),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                                color: Colors.grey),
                           ),
                           SizedBox(height: 6),
                           SizedBox(
@@ -69,7 +71,9 @@ class AddMomentScreen extends StatelessWidget {
                           SizedBox(height: 12),
                           Text('Where did it happen?',
                               style: TextStyle(
-                                  fontWeight: FontWeight.w400, fontSize: 12)),
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                  color: Colors.grey)),
                           SizedBox(height: 6),
                           SizedBox(
                               width: 340,
@@ -86,7 +90,9 @@ class AddMomentScreen extends StatelessWidget {
                           SizedBox(height: 12),
                           Text('Add an icon to your moment',
                               style: TextStyle(
-                                  fontWeight: FontWeight.w400, fontSize: 12)),
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                  color: Colors.grey)),
                           SizedBox(height: 6),
                           SizedBox(
                               width: 340,
@@ -101,12 +107,17 @@ class AddMomentScreen extends StatelessWidget {
                           SizedBox(height: 12),
                           Text('When did this happen?',
                               style: TextStyle(
-                                  fontWeight: FontWeight.w400, fontSize: 12)),
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                  color: Colors.grey)),
                           SizedBox(height: 6),
                           SizedBox(
                               width: 340,
                               child: Row(children: [
-                                Text('Start'),
+                                Text('Start',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey)),
                                 Spacer(),
                                 DateTimeSelector(
                                   initialValue: manager.startDate,
@@ -119,7 +130,12 @@ class AddMomentScreen extends StatelessWidget {
                           SizedBox(
                               width: 340,
                               child: Row(children: [
-                                Text('End'),
+                                Text(
+                                  'End',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.grey),
+                                ),
                                 Spacer(),
                                 DateTimeSelector(
                                   initialValue: manager.endDate,
@@ -143,7 +159,9 @@ class AddMomentScreen extends StatelessWidget {
                       builder: ((context) =>
                           const AddFeelingToMomentScreen()))),
             },
-            child: Row(children: [Spacer(), const Text('Next'), Spacer()]),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [const Text('Next')]),
           ),
         ));
   }

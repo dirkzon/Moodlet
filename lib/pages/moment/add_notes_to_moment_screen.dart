@@ -19,9 +19,9 @@ class AddNotesToMomentScreen extends StatelessWidget {
           endDate: manager.endDate,
           name: manager.name,
           location: manager.location,
-          pleasure: manager.pleasure,
-          arousal: manager.arousal,
-          dominance: manager.dominance,
+          pleasure: manager.pleasure.index,
+          arousal: manager.arousal.index,
+          dominance: manager.dominance.index,
           additionalNotes: manager.additionalNotes);
       repository.saveMoment(momentToSave);
       manager.clearMoment();
@@ -49,8 +49,8 @@ class AddNotesToMomentScreen extends StatelessWidget {
               color: Colors.black,
             ),
             onPressed: () {
+              manager.clearMoment();
               Navigator.of(context).popUntil((route) => route.isFirst);
-              // do something
             },
           )
         ],
@@ -69,7 +69,9 @@ class AddNotesToMomentScreen extends StatelessWidget {
                           'Add additional notes',
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                              fontWeight: FontWeight.w400, fontSize: 12),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              color: Colors.grey),
                         ),
                         SizedBox(height: 6),
                         SizedBox(
@@ -96,7 +98,9 @@ class AddNotesToMomentScreen extends StatelessWidget {
         margin: const EdgeInsets.all(24.0),
         child: ElevatedButton(
           onPressed: () => {saveMoment()},
-          child: Row(children: [Spacer(), const Text('Done'), Spacer()]),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [const Text('Done')]),
         ),
       ),
     );
