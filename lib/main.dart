@@ -8,11 +8,13 @@ import 'package:bletest/sensor/moodmetric_sensor_manager.dart';
 import 'package:bletest/settings/settings_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cron/cron.dart';
 
 import 'ble/bluetooth_manager.dart';
 
 void main() async {
   await HiveConfig.setUp();
+
   runApp(MoodlApp());
 }
 
@@ -48,6 +50,13 @@ class MoodlApp extends StatelessWidget {
           ),
         ],
         child: Consumer<SettingsManager>(builder: (_, settings, child) {
+          SensorManager manager = Provider.of(_);
+          final cron = Cron();
+          //every 30 minutes
+          cron.schedule(Schedule.parse('*/30 * * * *'), () async {
+            manager.downloadData();
+          });
+
           return MaterialApp(
               title: 'Moodl',
               theme: ThemeConfig.config(settings),

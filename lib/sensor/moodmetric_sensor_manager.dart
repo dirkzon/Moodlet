@@ -7,6 +7,7 @@ import '../recording/recording.dart';
 import 'moodmetric.dart';
 
 class SensorManager with ChangeNotifier {
+  bool downloading = false;
   bool connected = false;
   late Moodmetric sensor;
   Recording recording = Recording([]);
@@ -44,22 +45,33 @@ class SensorManager with ChangeNotifier {
   }
 
   downloadData() async {
-    int startAddress = 0;
+    if (connected) {
+      if (!downloading) {
+        debugPrint('downloading data from ring');
+        downloading = true;
+        int startAddress = 0;
 
-    progress = 0;
-    int endAddress = await sensor.getFlashState();
-    await sensor.setCommandModeReading(startAddress);
-    while (startAddress < endAddress) {
-      startAddress = await sensor.readMmData(startAddress);
-      _setProgress(startAddress, endAddress);
+        progress = 0;
+        int endAddress = await sensor.getFlashState();
+        await sensor.setCommandModeReading(startAddress);
+        while (startAddress < endAddress) {
+          startAddress = await sensor.readMmData(startAddress);
+          _setProgress(startAddress, endAddress);
+        }
+        ComboData combo = await sensor.getComboData();
+        await sensor.resetCommandMode();
+        recording = await sensor.decodeBuffer();
+        recording.aA = combo.aA;
+        await sensor.setReferenceTime();
+        await sensor.removeFlash();
+        notifyListeners();
+        downloading = false;
+      } else {
+        debugPrint('already downloading');
+      }
+    } else {
+      debugPrint('tried downloading but ring not connected');
     }
-    ComboData combo = await sensor.getComboData();
-    await sensor.resetCommandMode();
-    recording = await sensor.decodeBuffer();
-    recording.aA = combo.aA;
-    await sensor.setReferenceTime();
-    await sensor.removeFlash();
-    notifyListeners();
   }
 
   _setProgress(int start, int end) {
