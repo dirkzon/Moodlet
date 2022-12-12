@@ -52,14 +52,15 @@ class JournalScreen extends StatefulWidget {
 }
 
 class _JournalScreenState extends State<JournalScreen> {
-  DateTime start = DateTime.now().subtract(const Duration(hours: 12));
-  DateTime end = DateTime.now().add(const Duration(days: 1));
-
   @override
   Widget build(BuildContext context) {
     HiveEntryRepository entry = Provider.of<HiveEntryRepository>(context);
     HiveMomentRepository repository =
         Provider.of<HiveMomentRepository>(context);
+
+    DateTime now = DateTime.now();
+    DateTime start = new DateTime(now.year, now.month, now.day);
+    DateTime end = start.add(const Duration(days: 1));
 
     List<HiveMoment> moments = repository.getMoments(start, end);
 
@@ -189,8 +190,9 @@ class _JournalScreenState extends State<JournalScreen> {
                             onPressed: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: ((context) =>
-                                        const MomentDetailsScreen()))),
+                                    builder: ((context) => MomentDetailsScreen(
+                                          momentId: e.key,
+                                        )))),
                           ),
                         ]))))
                     .toList(),

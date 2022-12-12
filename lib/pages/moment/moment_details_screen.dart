@@ -9,29 +9,42 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../comms/hive/adaptors/hiveEntryRepository.dart';
-
-HiveMoment moment = new HiveMoment(
-    startDate: DateTime.now(),
-    endDate: DateTime.now().add(const Duration(hours: 2)),
-    name: "After Gym",
-    location: "Basic Fit",
-    pleasure: Pleasure.pleased.index,
-    arousal: Arousal.calm.index,
-    dominance: Dominance.neutral.index,
-    additionalNotes:
-        "Had a super exhausting gym session today, but I can feel myself getting more and more pumped as I finished cardio. I have to sustain myself from getting ice cream or any other sweets.");
+import '../../comms/hive/adaptors/hiveMomentRepository.dart';
 
 class MomentDetailsScreen extends StatefulWidget {
-  const MomentDetailsScreen({super.key});
+  var momentId;
+  MomentDetailsScreen({this.momentId});
 
   @override
   _MomentDetailsScreenState createState() => _MomentDetailsScreenState();
 }
 
 class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
+  var momentId;
+  // var moment = new HiveMoment(
+  //     startDate: DateTime.now(),
+  //     endDate: DateTime.now().add(const Duration(hours: 2)),
+  //     name: "After Gym",
+  //     location: "Basic Fit",
+  //     pleasure: Pleasure.pleased.index,
+  //     arousal: Arousal.calm.index,
+  //     dominance: Dominance.neutral.index,
+  //     additionalNotes:
+  //         "Had a super exhausting gym session today, but I can feel myself getting more and more pumped as I finished cardio. I have to sustain myself from getting ice cream or any other sweets.");
+
   @override
   Widget build(BuildContext context) {
     HiveEntryRepository entry = Provider.of<HiveEntryRepository>(context);
+    HiveMomentRepository momentRepo =
+        Provider.of<HiveMomentRepository>(context);
+
+    var moment = momentRepo.getMoment(momentId);
+
+    @override
+    void initState() {
+      super.initState();
+      momentId = widget.momentId;
+    }
 
     return Scaffold(
         appBar: AppBar(

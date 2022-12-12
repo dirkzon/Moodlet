@@ -16,12 +16,16 @@ class HiveMomentRepository with ChangeNotifier {
     return values.isEmpty ? [] : values;
   }
 
-  getMoment(Uuid id) {
+  getMoment(String id) {
     HiveMoment? moment = box.get(id);
     return moment;
   }
 
   saveMoment(HiveMoment moment) {
-    box.put(const Uuid().toString(), moment);
+    box.put(const Uuid().v4(), moment);
+  }
+
+  deleteMoment(String id) {
+    box.delete(id);
   }
 }
