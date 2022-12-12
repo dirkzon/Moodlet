@@ -1,48 +1,18 @@
+import 'package:bletest/pages/common_components/horizontal_number_picker.dart';
 import 'dart:ffi';
 
 import 'package:bletest/comms/hive/models/hiveMoment.dart';
-import 'package:bletest/moment/momentEnums.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../common_components/month_selector.dart';
+import '../common_components/timeframe_slector.dart';
 
 import '../../comms/hive/adaptors/hiveEntryRepository.dart';
 import '../../comms/hive/adaptors/hiveMomentRepository.dart';
 import '../common_components/chart.dart';
 import '../moment/add_moment_screen.dart';
 import '../moment/moment_details_screen.dart';
-
-HiveMoment moment = new HiveMoment(
-    startDate: DateTime.now(),
-    endDate: DateTime.now().add(const Duration(hours: 2)),
-    name: "After Gym",
-    location: "Basic Fit",
-    pleasure: Pleasure.pleased.index,
-    arousal: Arousal.calm.index,
-    dominance: Dominance.neutral.index,
-    additionalNotes:
-        "Had a super exhausting gym session today, but I can feel myself getting more and more pumped as I finished cardio. I have to sustain myself from getting ice cream or any other sweets.");
-HiveMoment moment2 = new HiveMoment(
-    startDate: DateTime.now(),
-    endDate: DateTime.now().add(const Duration(hours: 2)),
-    name: "Browsing model trains",
-    location: "Home",
-    pleasure: Pleasure.pleased.index,
-    arousal: Arousal.calm.index,
-    dominance: Dominance.neutral.index,
-    additionalNotes:
-        "this afternoon i browsed the internet for model trains from the year 1988, some of which i want to purchase to add to my collection.");
-HiveMoment moment3 = new HiveMoment(
-    startDate: DateTime.now(),
-    endDate: DateTime.now().add(const Duration(hours: 2)),
-    name: "Sports",
-    location: "Track field",
-    pleasure: Pleasure.neutral.index,
-    arousal: Arousal.wideAwake.index,
-    dominance: Dominance.independent.index,
-    additionalNotes:
-        "after dinner i decided to go for a run on the track field, there were some others running as well.");
-List<HiveMoment> dummyMoments = [moment, moment2, moment3];
 
 class JournalScreen extends StatefulWidget {
   const JournalScreen({super.key});
@@ -52,15 +22,67 @@ class JournalScreen extends StatefulWidget {
 }
 
 class _JournalScreenState extends State<JournalScreen> {
+  late DateTime start;
+  late DateTime end;
+
+  late int daysInMonth;
+  Duration timeFrame = const Duration(days: 1);
+
+  @override
+  void initState() {
+    super.initState();
+
+    DateTime now = DateTime.now();
+    start = new DateTime(now.year, now.month, now.day);
+    end = start.add(const Duration(days: 1));
+
+    daysInMonth = DateUtils.getDaysInMonth(start.year, start.month);
+  }
+
+  _setMonth(int m) {
+    setState(() {
+      start = DateTime(start.year, m, start.day);
+      daysInMonth = DateUtils.getDaysInMonth(start.year, start.month);
+      _addTimeFrameToEnd();
+    });
+  }
+
+  _setDay(int d) {
+    setState(() {
+      start = DateTime(start.year, start.month, d);
+      _addTimeFrameToEnd();
+    });
+  }
+
+  _setTimeFrame(String t) {
+    setState(() {
+      switch (t) {
+        case "Day":
+          timeFrame = const Duration(days: 1);
+          _addTimeFrameToEnd();
+
+          break;
+        case "Week":
+          timeFrame = const Duration(days: 7);
+          _addTimeFrameToEnd();
+          break;
+        case "Month":
+          timeFrame = Duration(days: daysInMonth);
+          _addTimeFrameToEnd();
+          break;
+      }
+    });
+  }
+
+  _addTimeFrameToEnd() {
+    end = start.add(timeFrame);
+  }
+
   @override
   Widget build(BuildContext context) {
     HiveEntryRepository entry = Provider.of<HiveEntryRepository>(context);
     HiveMomentRepository repository =
         Provider.of<HiveMomentRepository>(context);
-
-    DateTime now = DateTime.now();
-    DateTime start = new DateTime(now.year, now.month, now.day);
-    DateTime end = start.add(const Duration(days: 1));
 
     List<HiveMoment> moments = repository.getMoments(start, end);
 
@@ -74,17 +96,28 @@ class _JournalScreenState extends State<JournalScreen> {
                 title: const Text('Moodl Journal'),
                 backgroundColor: Colors.transparent,
               ),
+              TimeFrameSelector(((value) => _setTimeFrame(value!))),
               const Spacer(),
               Container(
                 color: const Color.fromARGB(25, 244, 119, 24),
                 child: Column(
                   children: [
+                    Container(
+                        margin: const EdgeInsets.only(left: 21, top: 9),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            MonthSelector(
+                                start.month, (value) => _setMonth(value!)),
+                          ],
+                        )),
+                    HorizontalNumberPicker(
+                      selected: start.day - 1,
+                      count: daysInMonth,
+                      onChanged: (value) => _setDay(value!),
+                    ),
                     MoodChart(
-                        entry.getEntries(DateTime.parse("2022-10-13"),
-                            DateTime.parse("2022-10-14")),
-                        DateTime.parse("2022-10-13"),
-                        (DateTime.parse("2022-10-14")),
-                        Colors.white),
+                        entry.getEntries(start, end), start, end, Colors.white),
                   ],
                 ),
               ),

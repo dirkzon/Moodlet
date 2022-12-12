@@ -90,7 +90,7 @@ class _DateTimeSelectorState extends State<DateTimeSelector> {
                       initialTime: TimeOfDay(
                           hour: _selectedDateTime.hour,
                           minute: _selectedDateTime.minute),
-                      initialEntryMode: TimePickerEntryMode.input);
+                      initialEntryMode: TimePickerEntryMode.dial);
                   if (time == null) return;
                   _updateTime(time);
                 },

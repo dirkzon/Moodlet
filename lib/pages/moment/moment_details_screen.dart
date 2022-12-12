@@ -20,17 +20,16 @@ class MomentDetailsScreen extends StatefulWidget {
 }
 
 class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
-  var momentId;
-  // var moment = new HiveMoment(
-  //     startDate: DateTime.now(),
-  //     endDate: DateTime.now().add(const Duration(hours: 2)),
-  //     name: "After Gym",
-  //     location: "Basic Fit",
-  //     pleasure: Pleasure.pleased.index,
-  //     arousal: Arousal.calm.index,
-  //     dominance: Dominance.neutral.index,
-  //     additionalNotes:
-  //         "Had a super exhausting gym session today, but I can feel myself getting more and more pumped as I finished cardio. I have to sustain myself from getting ice cream or any other sweets.");
+  var moment = new HiveMoment(
+      startDate: DateTime.now(),
+      endDate: DateTime.now().add(const Duration(hours: 2)),
+      name: "After Gym",
+      location: "Basic Fit",
+      pleasure: Pleasure.pleased.index,
+      arousal: Arousal.calm.index,
+      dominance: Dominance.neutral.index,
+      additionalNotes:
+          "Had a super exhausting gym session today, but I can feel myself getting more and more pumped as I finished cardio. I have to sustain myself from getting ice cream or any other sweets.");
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +37,11 @@ class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
     HiveMomentRepository momentRepo =
         Provider.of<HiveMomentRepository>(context);
 
-    var moment = momentRepo.getMoment(momentId);
+    var moment = momentRepo.getMoment(widget.momentId);
 
     @override
     void initState() {
       super.initState();
-      momentId = widget.momentId;
     }
 
     return Scaffold(
@@ -182,13 +180,6 @@ class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
                             ),
                           ),
                           Text(
-                            "Feeling exausted but motivated!",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
                             moment.additionalNotes,
                             style: TextStyle(
                               fontSize: 14,
@@ -196,21 +187,6 @@ class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          Text(
-                            "Feeling exausted but motivated!",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            moment.additionalNotes,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          )
                         ],
                       ),
                     ),
