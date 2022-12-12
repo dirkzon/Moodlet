@@ -1,6 +1,6 @@
 import 'package:bletest/comms/hive/adaptors/hiveEntryRepository.dart';
 import 'package:bletest/comms/hive/hiveConfig.dart';
-import 'package:bletest/notifications/notification_service.dart';
+import 'package:bletest/notifications/notification_manager.dart';
 import 'package:bletest/pages/navigation_page.dart';
 import 'package:bletest/pages/theme_config.dart';
 import 'package:bletest/sensor/moodmetric_sensor_manager.dart';
@@ -13,7 +13,6 @@ import 'ble/bluetooth_manager.dart';
 
 void main() async {
   await HiveConfig.setUp();
-  await NotificationService().init();
   runApp(MoodlApp());
 }
 
@@ -42,14 +41,24 @@ class MoodlApp extends StatelessWidget {
               return port;
             }),
           ),
+          ChangeNotifierProxyProvider<SettingsManager, NotificationManager>(
+              create: (context) => NotificationManager(
+                  Provider.of<SettingsManager>(context, listen: false)),
+              update: (_, settings, notifications) {
+                notifications!.update(settings);
+                return notifications;
+              }),
         ],
-        child: Consumer<SettingsManager>(builder: (_, settings, child) {
-          SensorManager manager = Provider.of(_);
+        child: Consumer<SettingsManager>(builder: (context, settings, child) {
+          SensorManager manager = Provider.of(context);
           final cron = Cron();
           //every 30 minutes
           cron.schedule(Schedule.parse('*/30 * * * *'), () async {
-            manager.downloadData();
+            await manager.downloadData();
           });
+          // must initialize notifications
+          NotificationManager notifs =
+              Provider.of<NotificationManager>(context);
 
           return MaterialApp(
               title: 'Moodl',

@@ -1,4 +1,5 @@
 import 'package:bletest/pages/settings_page/design_settings_screen.dart';
+import 'package:bletest/pages/settings_page/notification_settings_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'bluetooth_settings_screen.dart';
@@ -33,7 +34,11 @@ class _SettingsState extends State<SettingsScreen> {
                   children: const [Text('Bluetooth'), Spacer(), Text('>')],
                 )),
             TextButton(
-                onPressed: () {},
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) =>
+                            const NotificationSettingsScreen()))),
                 child: Row(
                   children: const [Text('Notifications'), Spacer(), Text('>')],
                 )),
