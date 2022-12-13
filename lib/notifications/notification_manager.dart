@@ -1,6 +1,4 @@
-import 'package:bletest/pages/journal_page/journal_screen.dart';
 import 'package:bletest/settings/settings_manager.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
