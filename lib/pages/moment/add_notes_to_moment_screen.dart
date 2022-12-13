@@ -19,7 +19,7 @@ class AddNotesToMomentScreen extends StatelessWidget {
           endDate: manager.endDate,
           name: manager.name,
           location: manager.location,
-          categories: manager.categories,
+          categories: manager.categoryNames(),
           pleasure: manager.pleasure.index,
           arousal: manager.arousal.index,
           dominance: manager.dominance.index,

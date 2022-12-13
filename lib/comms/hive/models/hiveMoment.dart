@@ -31,7 +31,7 @@ class HiveMoment extends HiveObject {
   String location;
 
   @HiveField(4)
-  List<MomentCategory> categories;
+  List<String> categories;
 
   @HiveField(5)
   int pleasure;

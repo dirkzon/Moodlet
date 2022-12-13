@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../../comms/hive/adaptors/hiveEntryRepository.dart';
 import '../../comms/hive/adaptors/hiveMomentRepository.dart';
+import '../../moment/moment_categories.dart';
 
 class MomentDetailsScreen extends StatefulWidget {
   var momentId;
@@ -20,18 +21,6 @@ class MomentDetailsScreen extends StatefulWidget {
 }
 
 class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
-  var moment = new HiveMoment(
-      startDate: DateTime.now(),
-      endDate: DateTime.now().add(const Duration(hours: 2)),
-      name: "After Gym",
-      location: "Basic Fit",
-      categories: [],
-      pleasure: Pleasure.pleased.index,
-      arousal: Arousal.calm.index,
-      dominance: Dominance.neutral.index,
-      additionalNotes:
-          "Had a super exhausting gym session today, but I can feel myself getting more and more pumped as I finished cardio. I have to sustain myself from getting ice cream or any other sweets.");
-
   @override
   Widget build(BuildContext context) {
     HiveEntryRepository entry = Provider.of<HiveEntryRepository>(context);
@@ -58,6 +47,12 @@ class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
                     fontSize: 14,
                     color: Colors.grey),
               ),
+              Row(
+                  children: moment.categories
+                      .map<Widget>((e) => Icon(momentCategories
+                          .firstWhere((cat) => cat.name == e)
+                          .icon))
+                      .toList())
             ],
           ),
           backgroundColor: Colors.transparent,
@@ -168,6 +163,7 @@ class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
                   Expanded(
                     flex: 40,
                     child: Container(
+                      width: double.infinity,
                       padding: const EdgeInsets.symmetric(
                           vertical: 0, horizontal: 24.0),
                       color: const Color.fromARGB(25, 244, 119, 24),

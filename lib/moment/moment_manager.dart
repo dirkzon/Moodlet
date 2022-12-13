@@ -33,6 +33,14 @@ class MomentManager with ChangeNotifier {
     notifyListeners();
   }
 
+  categoryNames() {
+    List<String> categoryNames = [];
+    categories.forEach((e) {
+      categoryNames.add(e.name);
+    });
+    return categoryNames;
+  }
+
   setCategories(List<MomentCategory> value) {
     categories = value;
     notifyListeners();

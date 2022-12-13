@@ -21,7 +21,7 @@ class HiveMomentAdapter extends TypeAdapter<HiveMoment> {
       endDate: fields[1] as DateTime,
       name: fields[2] as String,
       location: fields[3] as String,
-      categories: (fields[4] as List).cast<MomentCategory>(),
+      categories: (fields[4] as List).cast<String>(),
       pleasure: fields[5] as int,
       arousal: fields[6] as int,
       dominance: fields[7] as int,
