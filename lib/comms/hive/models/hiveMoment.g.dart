@@ -21,17 +21,18 @@ class HiveMomentAdapter extends TypeAdapter<HiveMoment> {
       endDate: fields[1] as DateTime,
       name: fields[2] as String,
       location: fields[3] as String,
-      pleasure: fields[4] as int,
-      arousal: fields[5] as int,
-      dominance: fields[6] as int,
-      additionalNotes: fields[7] as String,
+      categories: (fields[4] as List).cast<MomentCategory>(),
+      pleasure: fields[5] as int,
+      arousal: fields[6] as int,
+      dominance: fields[7] as int,
+      additionalNotes: fields[8] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, HiveMoment obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.startDate)
       ..writeByte(1)
@@ -41,12 +42,14 @@ class HiveMomentAdapter extends TypeAdapter<HiveMoment> {
       ..writeByte(3)
       ..write(obj.location)
       ..writeByte(4)
-      ..write(obj.pleasure)
+      ..write(obj.categories)
       ..writeByte(5)
-      ..write(obj.arousal)
+      ..write(obj.pleasure)
       ..writeByte(6)
-      ..write(obj.dominance)
+      ..write(obj.arousal)
       ..writeByte(7)
+      ..write(obj.dominance)
+      ..writeByte(8)
       ..write(obj.additionalNotes);
   }
 

@@ -25,6 +25,7 @@ class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
       endDate: DateTime.now().add(const Duration(hours: 2)),
       name: "After Gym",
       location: "Basic Fit",
+      categories: [],
       pleasure: Pleasure.pleased.index,
       arousal: Arousal.calm.index,
       dominance: Dominance.neutral.index,

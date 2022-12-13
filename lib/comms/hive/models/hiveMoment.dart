@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 import '../../../moment/momentEnums.dart';
+import '../../../moment/moment_categories.dart';
 
 part 'hiveMoment.g.dart';
 
@@ -10,6 +11,7 @@ class HiveMoment extends HiveObject {
     required this.endDate,
     required this.name,
     required this.location,
+    required this.categories,
     required this.pleasure,
     required this.arousal,
     required this.dominance,
@@ -29,14 +31,17 @@ class HiveMoment extends HiveObject {
   String location;
 
   @HiveField(4)
-  int pleasure;
+  List<MomentCategory> categories;
 
   @HiveField(5)
-  int arousal;
+  int pleasure;
 
   @HiveField(6)
-  int dominance;
+  int arousal;
 
   @HiveField(7)
+  int dominance;
+
+  @HiveField(8)
   String additionalNotes;
 }

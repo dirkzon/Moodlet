@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:bletest/moment/moment_categories.dart';
 import 'momentEnums.dart';
 
 class MomentManager with ChangeNotifier {
@@ -7,6 +7,7 @@ class MomentManager with ChangeNotifier {
   DateTime endDate = DateTime.now().add(const Duration(hours: 1));
   String name = "";
   String location = "";
+  List<MomentCategory> categories = [];
   Pleasure pleasure = Pleasure.neutral;
   Arousal arousal = Arousal.neutral;
   Dominance dominance = Dominance.neutral;
@@ -29,6 +30,11 @@ class MomentManager with ChangeNotifier {
 
   setLocation(String value) {
     location = value;
+    notifyListeners();
+  }
+
+  setCategories(List<MomentCategory> value) {
+    categories = value;
     notifyListeners();
   }
 

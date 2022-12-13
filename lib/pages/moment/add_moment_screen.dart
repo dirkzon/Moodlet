@@ -5,13 +5,26 @@ import 'package:provider/provider.dart';
 
 import '../common_components/date_time_selector.dart';
 
-class AddMomentScreen extends StatelessWidget {
+import '../../moment/moment_categories.dart';
+
+class AddMomentScreen extends StatefulWidget {
   const AddMomentScreen({super.key});
+
+  @override
+  State<AddMomentScreen> createState() => _AddMomentScreenState();
+}
+
+class _AddMomentScreenState extends State<AddMomentScreen> {
+  List<MomentCategory> suggestions = [];
+  _setSuggestions(List<MomentCategory> list) {
+    setState(() {
+      suggestions = list;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     MomentManager manager = Provider.of<MomentManager>(context);
-
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -90,12 +103,132 @@ class AddMomentScreen extends StatelessWidget {
                                   color: Colors.grey)),
                           SizedBox(height: 6),
                           TextFormField(
-                            enabled: false,
+                            enabled: true,
+                            onChanged: (value) {
+                              _setSuggestions(momentCategories
+                                  .where((MomentCategory cat) => cat.keywords
+                                      .any(((String element) => element
+                                          .contains(value.toLowerCase()))))
+                                  .toList());
+                              // list.retainWhere((cat) => cat.name
+                              //     .toLowerCase()
+                              //     .contains(value.toLowerCase()));
+                              // setState(() {
+                              //   suggestions:
+                              //   list;
+                              // });
+
+                              suggestions
+                                  .forEach((val) => print("list: " + val.name));
+                            },
                             decoration: InputDecoration(
                               hintText: 'Search',
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: 10.0, horizontal: 10.0),
                             ),
+                          ),
+
+                          //SUGGESTIONS
+                          Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.blueAccent)),
+                            child: Column(
+                              children: suggestions
+                                  .map(
+                                    (e) => Container(
+                                      decoration: BoxDecoration(
+                                          border: Border(
+                                              top: BorderSide(
+                                                  color: Colors.grey))),
+                                      width: 375,
+                                      child: (TextButton(
+                                        style: TextButton.styleFrom(
+                                          foregroundColor: Colors.grey,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 12.0),
+                                        ),
+                                        child: Align(
+                                            alignment: Alignment.topLeft,
+                                            child: Text(e.name)),
+                                        onPressed: () {
+                                          List<MomentCategory> list =
+                                              manager.categories;
+                                          if (!list.contains(e)) {
+                                            list.add(e);
+                                            manager.setCategories(list);
+                                          }
+                                        },
+                                      )
+                                          //   materialTapTargetSize:
+                                          //       MaterialTapTargetSize.shrinkWrap,
+                                          //   avatar: Icon(
+                                          //     e.icon,
+                                          //     color: Colors.white,
+                                          //   ),
+                                          //   label: Text(e.name),
+                                          //   onPressed: () {
+                                          //     print('I am the one thing in life.');
+                                          //   },
+                                          //   deleteIcon: Icon(
+                                          //     Icons.close,
+                                          //   ),
+                                          //   onDeleted: () {
+                                          //     List<MomentCategory> list =
+                                          //         appliedCategories;
+
+                                          //     list.removeWhere((element) =>
+                                          //         element.name == e.name);
+                                          //     setState(() {
+                                          //       appliedCategories:
+                                          //       list;
+                                          //     });
+                                          //   },
+                                          ),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ),
+
+                          SizedBox(height: 6),
+
+                          //CHIPS
+                          Wrap(
+                            children: manager.categories
+                                .map(
+                                  (e) => Container(
+                                    padding:
+                                        EdgeInsets.only(right: 6, bottom: 6),
+                                    child: InputChip(
+                                      materialTapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                      avatar: Icon(
+                                        e.icon,
+                                        color: Colors.white,
+                                      ),
+                                      label: Text(e.name),
+                                      onPressed: () {
+                                        print('I am the one thing in life.');
+                                      },
+                                      deleteIcon: Icon(
+                                        Icons.close,
+                                      ),
+                                      onDeleted: () {
+                                        List<MomentCategory> list =
+                                            manager.categories;
+                                        print(manager.categories.length);
+                                        print(list.length);
+                                        list.removeWhere((element) =>
+                                            element.name == e.name);
+
+                                        manager.setCategories(list);
+                                        print(manager.categories.length);
+                                        print(list.length);
+                                      },
+                                    ),
+                                  ),
+                                )
+                                .toList(),
                           ),
                           SizedBox(height: 12),
                           Text('When did this happen?',
