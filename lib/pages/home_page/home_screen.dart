@@ -1,4 +1,3 @@
-import 'package:bletest/notifications/notification_manager.dart';
 import 'package:bletest/profile/profile_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -6,7 +5,6 @@ import 'package:provider/provider.dart';
 
 import '../../comms/hive/adaptors/hiveEntryRepository.dart';
 import '../common_components/chart.dart';
-import '../common_components/date_time_selector.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

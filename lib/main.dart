@@ -65,9 +65,10 @@ class MoodlApp extends StatelessWidget {
           ),
           ChangeNotifierProxyProvider<ProfileManager, HiveProfileRepository>(
             create: (_) => HiveProfileRepository(),
-            update: ((_, sensor, port) {
-              port!.update(sensor);
-              return port;
+            update: ((_, sensor, repo) {
+              print('update');
+              repo!.update(sensor);
+              return repo;
             }),
           ),
         ],
@@ -82,8 +83,10 @@ class MoodlApp extends StatelessWidget {
               // must initialize notifications
               NotificationManager notifs =
                   Provider.of<NotificationManager>(context);
-              HiveSettingsRepository test =
+              HiveSettingsRepository s =
                   Provider.of<HiveSettingsRepository>(context);
+              HiveProfileRepository profile =
+                  Provider.of<HiveProfileRepository>(context);
 
               return MaterialApp(
                   title: 'Moodl',
