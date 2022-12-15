@@ -17,6 +17,8 @@ void main() async {
   runApp(MoodlApp());
 }
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 class MoodlApp extends StatelessWidget {
   @override
   Widget build(BuildContext buildcontext) {
@@ -73,8 +75,11 @@ class MoodlApp extends StatelessWidget {
 
               return MaterialApp(
                   title: 'Moodl',
+                  navigatorKey: navigatorKey,
                   theme: ThemeConfig.config(settings),
-                  home: const NavigationPage());
+                  home: const NavigationPage(
+                    initPage: 1,
+                  ));
             })));
   }
 }

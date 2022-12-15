@@ -1,3 +1,5 @@
+import 'package:bletest/main.dart';
+import 'package:bletest/pages/journal_page/journal_screen.dart';
 import 'package:bletest/settings/settings_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -27,19 +29,24 @@ class NotificationManager with ChangeNotifier {
             macOS: null);
 
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onDidReceiveNotificationResponse: _selectNotification);
+        onDidReceiveNotificationResponse: (details) => handle(details));
 
-    _initReflectionScheduledNotifications(manager.reflectionTime);
+    _setReflectionScheduledNotifications(manager.reflectionTime);
   }
 
-  Future _selectNotification(NotificationResponse respose) async {
-    print(respose.payload);
+  Future handle(NotificationResponse response) async {
+    if (response.payload != null) {
+      if (response.payload == 'reflection') {
+        await navigatorKey.currentState
+            ?.push(MaterialPageRoute(builder: (_) => const JournalScreen()));
+      }
+    }
   }
 
   void update(SettingsManager manager) {
     if (manager.allNotifications) {
       if (manager.journalNotifications) {
-        _initReflectionScheduledNotifications(manager.reflectionTime);
+        _setReflectionScheduledNotifications(manager.reflectionTime);
       } else {
         flutterLocalNotificationsPlugin.cancel(111111);
       }
@@ -48,7 +55,7 @@ class NotificationManager with ChangeNotifier {
     }
   }
 
-  Future _initReflectionScheduledNotifications(TimeOfDay scheduleTime) async {
+  Future _setReflectionScheduledNotifications(TimeOfDay scheduleTime) async {
     tz.initializeTimeZones();
     DateTime time = DateTime.now();
 
@@ -65,6 +72,10 @@ class NotificationManager with ChangeNotifier {
                 scheduleTime.minute),
             tz.local),
         const NotificationDetails(
+            iOS: DarwinNotificationDetails(
+              presentAlert: true,
+              presentBadge: true,
+            ),
             android: AndroidNotificationDetails(
                 'reflection', 'reflection_schedule')),
         androidAllowWhileIdle: true,
