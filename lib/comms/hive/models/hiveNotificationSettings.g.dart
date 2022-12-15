@@ -20,7 +20,7 @@ class HiveNotificationSettingsAdapter
     return HiveNotificationSettings(
       allNotifications: fields[0] == null ? true : fields[0] as bool,
       journalNotifications: fields[1] == null ? true : fields[1] as bool,
-      reflectionTime: fields[2] == null ? 1148 : fields[2] as int,
+      reflectionTime: fields[2] == null ? 1140 : fields[2] as int,
     );
   }
 
