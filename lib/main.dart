@@ -1,9 +1,11 @@
 import 'package:bletest/comms/hive/adaptors/hiveEntryRepository.dart';
+import 'package:bletest/comms/hive/adaptors/hiveProfileRepository.dart';
 import 'package:bletest/comms/hive/adaptors/settingsRepository.dart';
 import 'package:bletest/comms/hive/hiveConfig.dart';
 import 'package:bletest/notifications/notification_manager.dart';
 import 'package:bletest/pages/navigation_page.dart';
 import 'package:bletest/pages/theme_config.dart';
+import 'package:bletest/profile/profile_manager.dart';
 import 'package:bletest/sensor/moodmetric_sensor_manager.dart';
 import 'package:bletest/settings/settings_manager.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +34,9 @@ class MoodlApp extends StatelessWidget {
           ),
           ChangeNotifierProvider<HiveEntryRepository>(
               create: (_) => HiveEntryRepository()),
+          ChangeNotifierProvider<ProfileManager>(
+            create: (_) => ProfileManager(HiveProfileRepository()),
+          ),
           ChangeNotifierProxyProvider<BluetoothManager, SensorManager>(
             create: (BuildContext context) => SensorManager(
                 Provider.of<BluetoothManager>(context, listen: false)),
@@ -57,6 +62,13 @@ class MoodlApp extends StatelessWidget {
               repo!.updateSettings(settings);
               return repo;
             },
+          ),
+          ChangeNotifierProxyProvider<ProfileManager, HiveProfileRepository>(
+            create: (_) => HiveProfileRepository(),
+            update: ((_, sensor, port) {
+              port!.update(sensor);
+              return port;
+            }),
           ),
         ],
         builder: ((context, child) =>

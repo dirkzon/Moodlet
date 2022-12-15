@@ -1,4 +1,5 @@
 import 'package:bletest/notifications/notification_manager.dart';
+import 'package:bletest/profile/profile_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     DateTime end = DateTime.now().add(const Duration(days: 1));
 
     HiveEntryRepository entry = Provider.of<HiveEntryRepository>(context);
+    ProfileManager profileManager = Provider.of<ProfileManager>(context);
 
     return Scaffold(
         body: CustomScrollView(slivers: [
@@ -38,12 +40,14 @@ class _HomeScreenState extends State<HomeScreen> {
               AppBar(
                   title: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                     Text(
-                      'Hello, Stan',
+                      'Hello, ${profileManager.name}',
                     ),
                     Text(
-                      'Nice to see you again!',
+                      profileManager.isBirthDay
+                          ? 'Happy birhtday from moodl!'
+                          : 'Nice to see you again!',
                       style:
                           TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
                     ),

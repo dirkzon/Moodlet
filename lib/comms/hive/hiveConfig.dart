@@ -1,5 +1,6 @@
 import 'package:bletest/comms/hive/models/hiveDesignSettings.dart';
 import 'package:bletest/comms/hive/models/hiveNotificationSettings.dart';
+import 'package:bletest/comms/hive/models/hiveProfile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -41,6 +42,17 @@ class HiveConfig {
         await Hive.deleteBoxFromDisk("design");
       }
       await Hive.openBox<HiveDesignSettings>("design");
+    }
+
+    //profile
+    Hive.registerAdapter(HiveProfileAdapter());
+    try {
+      await Hive.openBox<HiveProfile>("profile");
+    } catch (e) {
+      if (await Hive.boxExists("profile")) {
+        await Hive.deleteBoxFromDisk("profile");
+      }
+      await Hive.openBox<HiveProfile>("profile");
     }
   }
 }
