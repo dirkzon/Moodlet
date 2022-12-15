@@ -1,3 +1,5 @@
+import 'package:bletest/comms/hive/models/hiveDesignSettings.dart';
+import 'package:bletest/comms/hive/models/hiveNotificationSettings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -17,6 +19,28 @@ class HiveConfig {
         await Hive.deleteBoxFromDisk("entries");
       }
       await Hive.openBox<HiveEntry>("entries");
+    }
+
+    //notifications
+    Hive.registerAdapter(HiveNotificationSettingsAdapter());
+    try {
+      await Hive.openBox<HiveNotificationSettings>("notifications");
+    } catch (e) {
+      if (await Hive.boxExists("notifications")) {
+        await Hive.deleteBoxFromDisk("notifications");
+      }
+      await Hive.openBox<HiveNotificationSettings>("notifications");
+    }
+
+    //design
+    Hive.registerAdapter(HiveDesignSettingsAdapter());
+    try {
+      await Hive.openBox<HiveDesignSettings>("design");
+    } catch (e) {
+      if (await Hive.boxExists("design")) {
+        await Hive.deleteBoxFromDisk("design");
+      }
+      await Hive.openBox<HiveDesignSettings>("design");
     }
   }
 }

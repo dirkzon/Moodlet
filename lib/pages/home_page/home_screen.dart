@@ -1,4 +1,6 @@
+import 'package:bletest/notifications/notification_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 import '../../comms/hive/adaptors/hiveEntryRepository.dart';
@@ -13,6 +15,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: AndroidNotificationDetails('id', 'name',
+          priority: Priority.low, importance: Importance.low));
+
   @override
   Widget build(BuildContext context) {
     DateTime start = DateTime.now();
@@ -58,7 +67,16 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 margin: const EdgeInsets.all(24.0),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    List test = await flutterLocalNotificationsPlugin
+                        .pendingNotificationRequests();
+                    print(test.length);
+                    test.forEach((element) {
+                      print(element);
+                    });
+                    await flutterLocalNotificationsPlugin.show(
+                        1234, 'title', 'body', platformChannelSpecifics);
+                  },
                   child: const Text('Capture Moment'),
                 ),
               ),

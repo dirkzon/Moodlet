@@ -1,5 +1,7 @@
 import 'package:bletest/comms/hive/adaptors/hiveEntryRepository.dart';
+import 'package:bletest/comms/hive/adaptors/settingsRepository.dart';
 import 'package:bletest/comms/hive/hiveConfig.dart';
+import 'package:bletest/notifications/notification_manager.dart';
 import 'package:bletest/pages/navigation_page.dart';
 import 'package:bletest/pages/theme_config.dart';
 import 'package:bletest/sensor/moodmetric_sensor_manager.dart';
@@ -12,17 +14,18 @@ import 'ble/bluetooth_manager.dart';
 
 void main() async {
   await HiveConfig.setUp();
-
   runApp(MoodlApp());
 }
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 class MoodlApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext buildcontext) {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider<SettingsManager>(
-            create: (context) => SettingsManager(),
+            create: (_) => SettingsManager(HiveSettingsRepository()),
           ),
           ChangeNotifierProvider<BluetoothManager>(
             create: (context) => BluetoothManager(),
@@ -41,19 +44,42 @@ class MoodlApp extends StatelessWidget {
               return port;
             }),
           ),
+          ChangeNotifierProxyProvider<SettingsManager, NotificationManager>(
+              create: (context) => NotificationManager(
+                  Provider.of<SettingsManager>(context, listen: false)),
+              update: (_, settings, notifications) {
+                notifications!.update(settings);
+                return notifications;
+              }),
+          ChangeNotifierProxyProvider<SettingsManager, HiveSettingsRepository>(
+            create: (_) => HiveSettingsRepository(),
+            update: (context, settings, repo) {
+              repo!.updateSettings(settings);
+              return repo;
+            },
+          ),
         ],
-        child: Consumer<SettingsManager>(builder: (_, settings, child) {
-          SensorManager manager = Provider.of(_);
-          final cron = Cron();
-          //every 30 minutes
-          cron.schedule(Schedule.parse('*/30 * * * *'), () async {
-            manager.downloadData();
-          });
+        builder: ((context, child) =>
+            Consumer<SettingsManager>(builder: (context, settings, child) {
+              SensorManager manager = Provider.of(context);
+              final cron = Cron();
+              //every 30 minutes
+              cron.schedule(Schedule.parse('*/30 * * * *'), () async {
+                await manager.downloadData();
+              });
+              // must initialize notifications
+              NotificationManager notifs =
+                  Provider.of<NotificationManager>(context);
+              HiveSettingsRepository test =
+                  Provider.of<HiveSettingsRepository>(context);
 
-          return MaterialApp(
-              title: 'Moodl',
-              theme: ThemeConfig.config(settings),
-              home: const NavigationPage());
-        }));
+              return MaterialApp(
+                  title: 'Moodl',
+                  navigatorKey: navigatorKey,
+                  theme: ThemeConfig.config(settings),
+                  home: const NavigationPage(
+                    initPage: 1,
+                  ));
+            })));
   }
 }
