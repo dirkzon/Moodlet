@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../comms/hive/adaptors/hiveEntryRepository.dart';
 import '../common_components/chart.dart';
-import '../common_components/date_time_selector.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -27,24 +27,42 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               AppBar(
-                  title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                    Text(
-                      'Hello, Stan',
-                    ),
-                    Text(
-                      'Nice to see you again!',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
-                    ),
-                  ])),
+                flexibleSpace: SizedBox(
+                  height: 0,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: const [
+                      Positioned(
+                        top: 60,
+                        right: 10,
+                        child: Image(
+                          image: AssetImage('assets/hello.png'),
+                          height: 215,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        'Hello, Stan',
+                      ),
+                      Text(
+                        'Nice to see you again!',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w400, fontSize: 18),
+                      ),
+                    ]),
+              ),
               const Spacer(),
               Container(
                 color: const Color.fromARGB(25, 244, 119, 24),
                 child: MoodChart(entry.getEntries(start, end), start, end,
                     Colors.transparent),
               ),
+
               Container(
                   alignment: Alignment.topLeft,
                   padding: const EdgeInsets.only(top: 24, left: 24),
@@ -63,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const Spacer(),
+
               // Chip(
               //   label: const Text('work'),
               //   deleteIcon: const Icon(Icons.close),
