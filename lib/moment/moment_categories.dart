@@ -28,4 +28,15 @@ final List<MomentCategory> momentCategories = [
       name: 'Spotlight',
       icon: Icons.center_focus_weak,
       keywords: ["spotlight", "center", "attention", "focus", "tension"]),
+  MomentCategory(name: 'Devices', icon: Icons.devices, keywords: [
+    "technology",
+    "phone",
+    "laptop",
+    "computer",
+    "screens",
+    "devices",
+    "social",
+    "media",
+    "electronics"
+  ]),
 ];
