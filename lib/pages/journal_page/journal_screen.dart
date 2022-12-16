@@ -5,6 +5,7 @@ import 'package:bletest/comms/hive/models/hiveMoment.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../moment/moment_manager.dart';
 import '../common_components/month_selector.dart';
 import '../common_components/timeframe_slector.dart';
 
@@ -84,6 +85,8 @@ class _JournalScreenState extends State<JournalScreen> {
     HiveMomentRepository repository =
         Provider.of<HiveMomentRepository>(context);
 
+    MomentManager manager = Provider.of<MomentManager>(context);
+
     List<HiveMoment> moments = repository.getMoments(start, end);
 
     return Scaffold(
@@ -146,26 +149,31 @@ class _JournalScreenState extends State<JournalScreen> {
                             child:
                                 Row(mainAxisSize: MainAxisSize.min, children: [
                               //Time element
-                              Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                        DateFormat('HH:mm').format(e.startDate),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 12,
-                                            color: Colors.grey)),
-                                    Text("-",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 12,
-                                            color: Colors.grey)),
-                                    Text(DateFormat('HH:mm').format(e.endDate),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 12,
-                                            color: Colors.grey)),
-                                  ]),
+                              SizedBox(
+                                width: 35,
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                          DateFormat('HH:mm')
+                                              .format(e.startDate),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 12,
+                                              color: Colors.grey)),
+                                      Text("-",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 12,
+                                              color: Colors.grey)),
+                                      Text(
+                                          DateFormat('HH:mm').format(e.endDate),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 12,
+                                              color: Colors.grey)),
+                                    ]),
+                              ),
 
                               // Moodle
                               Container(
@@ -217,26 +225,32 @@ class _JournalScreenState extends State<JournalScreen> {
 
                           //Details button
                           IconButton(
-                            icon: Icon(Icons.keyboard_arrow_right_outlined),
-                            iconSize: 35,
-                            color: Colors.grey,
-                            onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: ((context) => MomentDetailsScreen(
-                                          momentId: e.key,
-                                        )))),
-                          ),
+                              icon: Icon(Icons.keyboard_arrow_right_outlined),
+                              iconSize: 35,
+                              color: Colors.grey,
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) =>
+                                            MomentDetailsScreen(
+                                              momentId: e.key,
+                                            ))));
+                              }),
                         ]))))
                     .toList(),
               ),
               Container(
                 margin: const EdgeInsets.all(24.0),
                 child: ElevatedButton(
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: ((context) => const AddMomentScreen()))),
+                    onPressed: () {
+                      manager.setStartDate(start);
+                      manager.setEndDate(start);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: ((context) => const AddMomentScreen())));
+                    },
                     child: Row(
                       children: const [
                         Text('Capture a new moment',

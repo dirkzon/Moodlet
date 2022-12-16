@@ -23,7 +23,6 @@ class MomentDetailsScreen extends StatefulWidget {
 class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
   @override
   Widget build(BuildContext context) {
-    HiveEntryRepository entry = Provider.of<HiveEntryRepository>(context);
     HiveMomentRepository momentRepo =
         Provider.of<HiveMomentRepository>(context);
 
@@ -40,19 +39,30 @@ class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(moment.name),
-              Text(
-                moment.location,
-                style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: 14,
-                    color: Colors.grey),
-              ),
               Row(
-                  children: moment.categories
-                      .map<Widget>((e) => Icon(momentCategories
-                          .firstWhere((cat) => cat.name == e)
-                          .icon))
-                      .toList())
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(right: 6),
+                    child: Row(
+                        children: moment.categories
+                            .map<Widget>((e) => Icon(
+                                  momentCategories
+                                      .firstWhere((cat) => cat.name == e)
+                                      .icon,
+                                  size: 20,
+                                  color: Colors.lightGreen,
+                                ))
+                            .toList()),
+                  ),
+                  Text(
+                    moment.location,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        fontSize: 14,
+                        color: Colors.grey),
+                  ),
+                ],
+              )
             ],
           ),
           backgroundColor: Colors.transparent,
@@ -106,7 +116,7 @@ class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
 
                         // Mood level
                         Container(
-                          height: 160,
+                          height: 180,
                           width: 140,
                           padding: EdgeInsets.all(15),
                           decoration: BoxDecoration(
@@ -125,14 +135,31 @@ class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
                                     fontSize: 16),
                               ),
                               Spacer(),
-                              Text(
-                                "67",
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 72),
-                              ),
+                              moment.averageMM == 0
+                                  ? Icon(
+                                      Icons.remove,
+                                      size: 55,
+                                    )
+                                  : Text(
+                                      "${moment.averageMM}",
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 72),
+                                    ),
+                              Spacer(),
+                              if (moment.averageMM != 0)
+                                Row(
+                                  children: [
+                                    Icon(Icons.arrow_downward),
+                                    Text("${moment.groundMM}"),
+                                    Spacer(),
+                                    Icon(Icons.arrow_upward),
+                                    Text("${moment.peakMM}"),
+                                  ],
+                                )
                             ],
                           ),
                         ),
@@ -140,7 +167,7 @@ class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
 
                         // Moodl
                         Container(
-                          height: 160,
+                          height: 180,
                           width: 140,
                           padding: EdgeInsets.all(15),
                           decoration: BoxDecoration(

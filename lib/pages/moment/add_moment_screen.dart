@@ -172,37 +172,35 @@ class _AddMomentScreenState extends State<AddMomentScreen> {
                                                               .transparent))),
                                           width: 375,
                                           child: (Container(
-                                              margin: EdgeInsets.symmetric(
-                                                  horizontal: 6),
-                                              child: Row(children: [
-                                                Icon(
-                                                  e.value.icon,
-                                                ),
-                                                TextButton(
-                                                  style: TextButton.styleFrom(
-                                                    foregroundColor:
-                                                        Colors.grey,
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 12.0),
-                                                  ),
-                                                  child: Align(
-                                                      alignment:
-                                                          Alignment.topLeft,
-                                                      child:
-                                                          Text(e.value.name)),
-                                                  onPressed: () {
-                                                    List<MomentCategory> list =
-                                                        manager.categories;
-                                                    if (!list
-                                                        .contains(e.value)) {
-                                                      list.add(e.value);
-                                                      manager
-                                                          .setCategories(list);
-                                                    }
-                                                  },
-                                                )
-                                              ]))),
+                                              child: TextButton(
+                                            style: TextButton.styleFrom(
+                                              foregroundColor: Colors.grey,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 12.0),
+                                            ),
+                                            child: Align(
+                                                alignment: Alignment.topLeft,
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                        margin: EdgeInsets.only(
+                                                            right: 6),
+                                                        child: Icon(
+                                                          e.value.icon,
+                                                        )),
+                                                    Text(e.value.name)
+                                                  ],
+                                                )),
+                                            onPressed: () {
+                                              List<MomentCategory> list =
+                                                  manager.categories;
+                                              if (!list.contains(e.value)) {
+                                                list.add(e.value);
+                                                manager.setCategories(list);
+                                              }
+                                            },
+                                          ))),
                                         ),
                                       )
                                       .toList(),

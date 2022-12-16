@@ -1,3 +1,4 @@
+import 'package:bletest/comms/hive/adaptors/hiveEntryRepository.dart';
 import 'package:bletest/comms/hive/adaptors/hiveMomentRepository.dart';
 import 'package:bletest/comms/hive/models/hiveMoment.dart';
 import 'package:bletest/moment/moment_manager.dart';
@@ -10,10 +11,29 @@ class AddNotesToMomentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MomentManager manager = Provider.of<MomentManager>(context);
-    HiveMomentRepository repository =
+
+    HiveEntryRepository entryRepo = Provider.of<HiveEntryRepository>(context);
+
+    HiveMomentRepository momentRepo =
         Provider.of<HiveMomentRepository>(context);
 
     saveMoment() {
+      var entries = entryRepo.getEntries(manager.startDate, manager.endDate);
+
+      var average = 0;
+      var ground = 0;
+      var peak = 0;
+
+      if (entries.isNotEmpty) {
+        average = entries.map((entry) => entry.mm).reduce((a, b) => a + b) ~/
+            entries.length;
+
+        ground =
+            entries.map((entry) => entry.mm).reduce((a, b) => a < b ? a : b);
+
+        peak = entries.map((entry) => entry.mm).reduce((a, b) => a > b ? a : b);
+      }
+
       HiveMoment momentToSave = new HiveMoment(
           startDate: manager.startDate,
           endDate: manager.endDate,
@@ -23,8 +43,11 @@ class AddNotesToMomentScreen extends StatelessWidget {
           pleasure: manager.pleasure.index,
           arousal: manager.arousal.index,
           dominance: manager.dominance.index,
-          additionalNotes: manager.additionalNotes);
-      repository.saveMoment(momentToSave);
+          additionalNotes: manager.additionalNotes,
+          averageMM: average,
+          groundMM: ground,
+          peakMM: peak);
+      momentRepo.saveMoment(momentToSave);
       manager.clearMoment();
       Navigator.of(context).popUntil((route) => route.isFirst);
     }
@@ -96,7 +119,7 @@ class AddNotesToMomentScreen extends StatelessWidget {
       bottomSheet: Container(
         margin: const EdgeInsets.all(24.0),
         child: ElevatedButton(
-          onPressed: () => {saveMoment()},
+          onPressed: manager.isValid() ? () => {saveMoment()} : null,
           child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [const Text('Done')]),

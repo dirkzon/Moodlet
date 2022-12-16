@@ -1,6 +1,4 @@
 import 'package:hive/hive.dart';
-import '../../../moment/momentEnums.dart';
-import '../../../moment/moment_categories.dart';
 
 part 'hiveMoment.g.dart';
 
@@ -16,6 +14,9 @@ class HiveMoment extends HiveObject {
     required this.arousal,
     required this.dominance,
     required this.additionalNotes,
+    required this.averageMM,
+    required this.groundMM,
+    required this.peakMM,
   });
 
   @HiveField(0)
@@ -44,4 +45,13 @@ class HiveMoment extends HiveObject {
 
   @HiveField(8)
   String additionalNotes;
+
+  @HiveField(9)
+  int averageMM;
+
+  @HiveField(10)
+  int groundMM;
+
+  @HiveField(11)
+  int peakMM;
 }

@@ -71,9 +71,14 @@ class MomentManager with ChangeNotifier {
     endDate = DateTime.now().add(const Duration(hours: 1));
     name = "";
     location = "";
+    categories.clear();
     pleasure = Pleasure.neutral;
     arousal = Arousal.neutral;
     dominance = Dominance.neutral;
     additionalNotes = "";
+  }
+
+  bool isValid() {
+    return name != "" && startDate.compareTo(endDate) <= 0;
   }
 }
