@@ -12,6 +12,7 @@ import '../common_components/timeframe_slector.dart';
 import '../../comms/hive/adaptors/hiveEntryRepository.dart';
 import '../../comms/hive/adaptors/hiveMomentRepository.dart';
 import '../common_components/chart.dart';
+import '../common_components/year_selector.dart';
 import '../moment/add_moment_screen.dart';
 import '../moment/moment_details_screen.dart';
 
@@ -34,10 +35,18 @@ class _JournalScreenState extends State<JournalScreen> {
     super.initState();
 
     DateTime now = DateTime.now();
-    start = new DateTime(now.year, now.month, now.day);
+    start = DateTime(now.year, now.month, now.day);
     end = start.add(const Duration(days: 1));
 
     daysInMonth = DateUtils.getDaysInMonth(start.year, start.month);
+  }
+
+  _setYear(int y) {
+    setState(() {
+      start = DateTime(y, start.month, start.day);
+      daysInMonth = DateUtils.getDaysInMonth(start.year, start.month);
+      _addTimeFrameToEnd();
+    });
   }
 
   _setMonth(int m) {
@@ -112,6 +121,8 @@ class _JournalScreenState extends State<JournalScreen> {
                           children: [
                             MonthSelector(
                                 start.month, (value) => _setMonth(value!)),
+                            YearSelector(
+                                start.year, (value) => _setYear(value!)),
                           ],
                         )),
                     HorizontalNumberPicker(
