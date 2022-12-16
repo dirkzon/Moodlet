@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'models/hiveEntry.dart';
+import 'models/hiveMoment.dart';
 
 class HiveConfig {
   static setUp() async {
@@ -53,6 +54,17 @@ class HiveConfig {
         await Hive.deleteBoxFromDisk("profile");
       }
       await Hive.openBox<HiveProfile>("profile");
+
+      //moments
+      Hive.registerAdapter(HiveMomentAdapter());
+      try {
+        await Hive.openBox<HiveMoment>("moments");
+      } catch (e) {
+        if (await Hive.boxExists("moments")) {
+          await Hive.deleteBoxFromDisk("moments");
+        }
+        await Hive.openBox<HiveMoment>("moments");
+      }
     }
   }
 }

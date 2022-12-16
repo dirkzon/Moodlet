@@ -1,8 +1,14 @@
 import 'package:bletest/comms/hive/adaptors/hiveEntryRepository.dart';
+<<<<<<< HEAD
 import 'package:bletest/comms/hive/adaptors/hiveProfileRepository.dart';
 import 'package:bletest/comms/hive/adaptors/settingsRepository.dart';
 import 'package:bletest/comms/hive/hiveConfig.dart';
 import 'package:bletest/notifications/notification_manager.dart';
+=======
+import 'package:bletest/comms/hive/adaptors/hiveMomentRepository.dart';
+import 'package:bletest/comms/hive/hiveConfig.dart';
+import 'package:bletest/moment/moment_manager.dart';
+>>>>>>> f3-moments
 import 'package:bletest/pages/navigation_page.dart';
 import 'package:bletest/pages/theme_config.dart';
 import 'package:bletest/profile/profile_manager.dart';
@@ -29,6 +35,9 @@ class MoodlApp extends StatelessWidget {
           ChangeNotifierProvider<SettingsManager>(
             create: (_) => SettingsManager(HiveSettingsRepository()),
           ),
+          ChangeNotifierProvider<MomentManager>(
+            create: (context) => MomentManager(),
+          ),
           ChangeNotifierProvider<BluetoothManager>(
             create: (context) => BluetoothManager(),
           ),
@@ -37,6 +46,8 @@ class MoodlApp extends StatelessWidget {
           ChangeNotifierProvider<ProfileManager>(
             create: (_) => ProfileManager(HiveProfileRepository()),
           ),
+          ChangeNotifierProvider<HiveMomentRepository>(
+              create: (_) => HiveMomentRepository()),
           ChangeNotifierProxyProvider<BluetoothManager, SensorManager>(
             create: (BuildContext context) => SensorManager(
                 Provider.of<BluetoothManager>(context, listen: false)),
