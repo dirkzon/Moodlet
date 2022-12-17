@@ -9,10 +9,11 @@ class HiveMomentRepository with ChangeNotifier {
   List<HiveMoment> getMoments(DateTime from, DateTime to) {
     List<HiveMoment> values = box.values
         .where((HiveMoment moment) =>
-            moment.startDate.millisecondsSinceEpoch >
+            moment.startDate.millisecondsSinceEpoch >=
                 from.millisecondsSinceEpoch &&
             moment.startDate.millisecondsSinceEpoch < to.millisecondsSinceEpoch)
         .toList();
+
     return values.isEmpty ? [] : values;
   }
 
@@ -28,4 +29,22 @@ class HiveMomentRepository with ChangeNotifier {
   deleteMoment(String id) {
     box.delete(id);
   }
+
+  // for debugging purposes
+  // deleteMoments(DateTime from, DateTime to) {
+  //   List<HiveMoment> values = box.values
+  //       .where((HiveMoment moment) =>
+  //           moment.startDate.millisecondsSinceEpoch >
+  //               from.millisecondsSinceEpoch &&
+  //           moment.startDate.millisecondsSinceEpoch < to.millisecondsSinceEpoch)
+  //       .toList();
+
+  //   print(from);
+  //   print(to);
+  //   print(values);
+
+  //   values.forEach((element) {
+  //     box.delete(element.key);
+  //   });
+  // }
 }

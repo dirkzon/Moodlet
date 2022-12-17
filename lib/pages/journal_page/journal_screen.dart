@@ -161,7 +161,7 @@ class _JournalScreenState extends State<JournalScreen> {
                                 Row(mainAxisSize: MainAxisSize.min, children: [
                               //Time element
                               SizedBox(
-                                width: 35,
+                                width: 40,
                                 child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [

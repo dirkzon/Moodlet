@@ -79,6 +79,6 @@ class MomentManager with ChangeNotifier {
   }
 
   bool isValid() {
-    return name != "" && startDate.compareTo(endDate) <= 0;
+    return name != "" && startDate.isBefore(endDate);
   }
 }

@@ -12,17 +12,6 @@ class HiveConfig {
     debugPrint('Setting up Hive');
     await Hive.initFlutter();
 
-    //entries
-    Hive.registerAdapter(HiveEntryAdapter());
-    try {
-      await Hive.openBox<HiveEntry>("entries");
-    } catch (e) {
-      if (await Hive.boxExists("entries")) {
-        await Hive.deleteBoxFromDisk("entries");
-      }
-      await Hive.openBox<HiveEntry>("entries");
-    }
-
     //notifications
     Hive.registerAdapter(HiveNotificationSettingsAdapter());
     try {
@@ -54,17 +43,28 @@ class HiveConfig {
         await Hive.deleteBoxFromDisk("profile");
       }
       await Hive.openBox<HiveProfile>("profile");
+    }
 
-      //moments
-      Hive.registerAdapter(HiveMomentAdapter());
-      try {
-        await Hive.openBox<HiveMoment>("moments");
-      } catch (e) {
-        if (await Hive.boxExists("moments")) {
-          await Hive.deleteBoxFromDisk("moments");
-        }
-        await Hive.openBox<HiveMoment>("moments");
+    //entries
+    Hive.registerAdapter(HiveEntryAdapter());
+    try {
+      await Hive.openBox<HiveEntry>("entries");
+    } catch (e) {
+      if (await Hive.boxExists("entries")) {
+        await Hive.deleteBoxFromDisk("entries");
       }
+      await Hive.openBox<HiveEntry>("entries");
+    }
+
+    //moments
+    Hive.registerAdapter(HiveMomentAdapter());
+    try {
+      await Hive.openBox<HiveMoment>("moments");
+    } catch (e) {
+      if (await Hive.boxExists("moments")) {
+        await Hive.deleteBoxFromDisk("moments");
+      }
+      await Hive.openBox<HiveMoment>("moments");
     }
   }
 }
