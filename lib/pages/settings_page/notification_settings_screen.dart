@@ -78,28 +78,35 @@ class NotificationSettingsScreen extends StatelessWidget {
                         ],
                       )),
                   if (manager.journalNotifications)
-                    InkWell(
-                        onTap: () async {
-                          TimeOfDay? time = await showTimePicker(
-                              context: context,
-                              initialTime: manager.reflectionTime,
-                              initialEntryMode: TimePickerEntryMode.input);
-                          if (time == null) return;
-                          manager.setReflectionTime(time);
-                        },
-                        child: Container(
-                            width: 100,
-                            decoration: BoxDecoration(
-                                color: const Color.fromARGB(31, 118, 118, 128),
-                                borderRadius: BorderRadius.circular(6.0)),
-                            padding: const EdgeInsets.all(4.0),
-                            child: Center(
-                              child: Text(
-                                  "${manager.reflectionTime.hour} : ${manager.reflectionTime.minute.toString().padLeft(2, '0')}",
-                                  style: const TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w400)),
-                            )))
+                    Container(
+                        margin: const EdgeInsets.only(left: 24, right: 24),
+                        child: Row(children: [
+                          const Spacer(),
+                          InkWell(
+                              onTap: () async {
+                                TimeOfDay? time = await showTimePicker(
+                                    context: context,
+                                    initialTime: manager.reflectionTime,
+                                    initialEntryMode:
+                                        TimePickerEntryMode.input);
+                                if (time == null) return;
+                                manager.setReflectionTime(time);
+                              },
+                              child: Container(
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                      color: const Color.fromARGB(
+                                          31, 118, 118, 128),
+                                      borderRadius: BorderRadius.circular(6.0)),
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Center(
+                                    child: Text(
+                                        "${manager.reflectionTime.hour} : ${manager.reflectionTime.minute.toString().padLeft(2, '0')}",
+                                        style: const TextStyle(
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.w400)),
+                                  )))
+                        ])),
                 ],
               ))
         ]));

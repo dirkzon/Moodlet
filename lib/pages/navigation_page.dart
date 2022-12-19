@@ -50,7 +50,7 @@ class _NavigationState extends State<NavigationPage> {
           items: const [
             BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.book_outlined,
+                  Icons.auto_stories_outlined,
                 ),
                 label: 'Journal',
                 tooltip: 'Journal'),
