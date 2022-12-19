@@ -1,5 +1,8 @@
+import 'package:bletest/profile/profile_manager.dart';
+import 'package:bletest/pages/moment/add_moment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 import '../../comms/hive/adaptors/hiveEntryRepository.dart';
@@ -13,12 +16,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: AndroidNotificationDetails('id', 'name',
+          priority: Priority.low, importance: Importance.low));
+
   @override
   Widget build(BuildContext context) {
     DateTime start = DateTime.now();
     DateTime end = DateTime.now().add(const Duration(days: 1));
 
     HiveEntryRepository entry = Provider.of<HiveEntryRepository>(context);
+    ProfileManager profileManager = Provider.of<ProfileManager>(context);
 
     return Scaffold(
         body: CustomScrollView(slivers: [
@@ -43,19 +54,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'Hello, Stan',
-                      ),
-                      Text(
-                        'Nice to see you again!',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w400, fontSize: 18),
-                      ),
-                    ]),
-              ),
+                  title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                    Text(
+                      'Hello, ${profileManager.name}',
+                    ),
+                    Text(
+                      profileManager.isBirthDay
+                          ? 'Happy birhtday from moodl!'
+                          : 'Nice to see you again!',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
+                    ),
+                  ])),
               const Spacer(),
               Container(
                 color: const Color.fromARGB(25, 244, 119, 24),
@@ -76,7 +88,10 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 margin: const EdgeInsets.all(24.0),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: ((context) => const AddMomentScreen()))),
                   child: const Text('Capture Moment'),
                 ),
               ),

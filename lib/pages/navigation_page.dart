@@ -5,7 +5,9 @@ import 'journal_page/journal_screen.dart';
 import 'settings_page/settings_screen.dart';
 
 class NavigationPage extends StatefulWidget {
-  const NavigationPage({key}) : super(key: key);
+  const NavigationPage({Key? key, required this.initPage}) : super(key: key);
+
+  final int initPage;
 
   @override
   _NavigationState createState() => _NavigationState();
@@ -20,6 +22,12 @@ class _NavigationState extends State<NavigationPage> {
     const SettingsScreen(),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _updateIndex(widget.initPage);
+  }
+
   void _updateIndex(int value) {
     setState(() {
       _index = value;
@@ -27,7 +35,7 @@ class _NavigationState extends State<NavigationPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext buildContext) {
     return Scaffold(
         body: _screens[_index],
         bottomNavigationBar: BottomNavigationBar(

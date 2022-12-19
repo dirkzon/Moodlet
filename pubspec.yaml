@@ -44,7 +44,9 @@ dependencies:
   intl: ^0.17.0
   charts_flutter: ^0.12.0
   cron: ^0.5.1
+  uuid: ^3.0.7
   list_wheel_scroll_view_x: ^0.0.2
+  flutter_local_notifications: ^12.0.4
 
 
 dev_dependencies:
@@ -69,7 +71,11 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+ # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/pleasure.png
+    - assets/arousal.png
+    - assets/dominance.png
     - assets/hello.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
