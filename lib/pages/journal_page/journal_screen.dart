@@ -30,6 +30,8 @@ class _JournalScreenState extends State<JournalScreen> {
   late int daysInMonth;
   Duration timeFrame = const Duration(days: 1);
 
+  String momentText = 'Todays moments';
+
   @override
   void initState() {
     super.initState();
@@ -70,15 +72,17 @@ class _JournalScreenState extends State<JournalScreen> {
         case "Day":
           timeFrame = const Duration(days: 1);
           _addTimeFrameToEnd();
-
+          momentText = 'Todays moments';
           break;
         case "Week":
           timeFrame = const Duration(days: 7);
           _addTimeFrameToEnd();
+          momentText = 'This weeks moments';
           break;
         case "Month":
           timeFrame = Duration(days: daysInMonth);
           _addTimeFrameToEnd();
+          momentText = 'This months moments';
           break;
       }
     });
@@ -139,9 +143,9 @@ class _JournalScreenState extends State<JournalScreen> {
               Container(
                 alignment: Alignment.topLeft,
                 margin: const EdgeInsets.all(24),
-                child: const Text(
-                  'Todays moments',
-                  style: TextStyle(
+                child: Text(
+                  momentText,
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                   ),
@@ -156,7 +160,7 @@ class _JournalScreenState extends State<JournalScreen> {
                         child: Card(
                             child: Row(children: [
                           Container(
-                            margin: EdgeInsets.only(right: 12, left: 12),
+                            margin: const EdgeInsets.only(right: 12, left: 12),
                             child:
                                 Row(mainAxisSize: MainAxisSize.min, children: [
                               //Time element
