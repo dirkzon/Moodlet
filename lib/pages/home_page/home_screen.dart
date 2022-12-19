@@ -1,6 +1,7 @@
 import 'package:bletest/profile/profile_manager.dart';
 import 'package:bletest/pages/moment/add_moment_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
@@ -37,6 +38,22 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               AppBar(
+                flexibleSpace: SizedBox(
+                  height: 0,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: const [
+                      Positioned(
+                        top: 60,
+                        right: 10,
+                        child: Image(
+                          image: AssetImage('assets/hello.png'),
+                          height: 215,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                   title: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -57,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: MoodChart(entry.getEntries(start, end), start, end,
                     Colors.transparent),
               ),
+
               Container(
                   alignment: Alignment.topLeft,
                   padding: const EdgeInsets.only(top: 24, left: 24),
@@ -78,6 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const Spacer(),
+
               // Chip(
               //   label: const Text('work'),
               //   deleteIcon: const Icon(Icons.close),

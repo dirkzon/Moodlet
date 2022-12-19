@@ -1,5 +1,6 @@
 import 'package:bletest/settings/settings_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ThemeConfig {
   static config(SettingsManager manager) {
