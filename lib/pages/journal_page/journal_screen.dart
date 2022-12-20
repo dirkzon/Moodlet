@@ -102,6 +102,10 @@ class _JournalScreenState extends State<JournalScreen> {
 
     List<HiveMoment> moments = repository.getMoments(start, end);
 
+    updateMoments() {
+      _setDay(start.day);
+    }
+
     return Scaffold(
         body: CustomScrollView(slivers: [
       SliverFillRemaining(
@@ -250,7 +254,9 @@ class _JournalScreenState extends State<JournalScreen> {
                                         builder: ((context) =>
                                             MomentDetailsScreen(
                                               momentId: e.key,
-                                            ))));
+                                            )))).then((_) {
+                                  updateMoments();
+                                });
                               }),
                         ]))))
                     .toList(),
@@ -264,7 +270,10 @@ class _JournalScreenState extends State<JournalScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: ((context) => const AddMomentScreen())));
+                              builder: ((context) =>
+                                  const AddMomentScreen()))).then((_) {
+                        updateMoments();
+                      });
                     },
                     child: Row(
                       children: const [
