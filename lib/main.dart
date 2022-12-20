@@ -53,6 +53,7 @@ class MoodlApp extends StatelessWidget {
             create: (_) => HiveEntryRepository(),
             update: ((_, sensor, port) {
               port!.update(sensor);
+              sensor.clearRecording();
               return port;
             }),
           ),
@@ -73,7 +74,6 @@ class MoodlApp extends StatelessWidget {
           ChangeNotifierProxyProvider<ProfileManager, HiveProfileRepository>(
             create: (_) => HiveProfileRepository(),
             update: ((_, sensor, repo) {
-              print('update');
               repo!.update(sensor);
               return repo;
             }),
@@ -84,7 +84,7 @@ class MoodlApp extends StatelessWidget {
               SensorManager manager = Provider.of(context);
               final cron = Cron();
               //every 30 minutes
-              cron.schedule(Schedule.parse('*/30 * * * *'), () async {
+              cron.schedule(Schedule.parse('*/15 * * * *'), () async {
                 await manager.downloadData();
               });
               // must initialize notifications

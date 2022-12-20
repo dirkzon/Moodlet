@@ -44,28 +44,39 @@ class SensorManager with ChangeNotifier {
     notifyListeners();
   }
 
+  clearRecording() {
+    recording.sessions = [];
+  }
+
   downloadData() async {
     if (connected) {
       if (!downloading) {
         debugPrint('downloading data from ring');
-        downloading = true;
+        downloading = false;
         int startAddress = 0;
 
         progress = 0;
         int endAddress = await sensor.getFlashState();
         await sensor.setCommandModeReading(startAddress);
-        while (startAddress < endAddress) {
-          startAddress = await sensor.readMmData(startAddress);
-          _setProgress(startAddress, endAddress);
+        print(endAddress);
+        print('before');
+        if (endAddress > 0) {
+          while (startAddress < endAddress) {
+            startAddress = await sensor.readMmData(startAddress);
+            _setProgress(startAddress, endAddress);
+          }
+          ComboData combo = await sensor.getComboData();
+          await sensor.resetCommandMode();
+          recording = await sensor.decodeBuffer();
+          recording.aA = combo.aA;
+          await sensor.setReferenceTime();
+          if (recording.sessions.isNotEmpty) {
+            await sensor.removeFlash();
+          }
+          downloading = false;
+          notifyListeners();
+          debugPrint('finished downloading');
         }
-        ComboData combo = await sensor.getComboData();
-        await sensor.resetCommandMode();
-        recording = await sensor.decodeBuffer();
-        recording.aA = combo.aA;
-        await sensor.setReferenceTime();
-        await sensor.removeFlash();
-        notifyListeners();
-        downloading = false;
       } else {
         debugPrint('already downloading');
       }

@@ -19,15 +19,20 @@ class _HomeScreenState extends State<HomeScreen> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  NotificationDetails platformChannelSpecifics = NotificationDetails(
-      android: AndroidNotificationDetails('id', 'name',
-          priority: Priority.low, importance: Importance.low));
+  late DateTime start;
+  late DateTime end;
+
+  @override
+  void initState() {
+    super.initState();
+
+    DateTime now = DateTime.now();
+    start = DateTime(now.year, now.month, now.day);
+    end = start.add(const Duration(days: 1));
+  }
 
   @override
   Widget build(BuildContext context) {
-    DateTime start = DateTime.now();
-    DateTime end = DateTime.now().add(const Duration(days: 1));
-
     HiveEntryRepository entry = Provider.of<HiveEntryRepository>(context);
     ProfileManager profileManager = Provider.of<ProfileManager>(context);
 
@@ -38,36 +43,36 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               AppBar(
-                flexibleSpace: SizedBox(
-                  height: 0,
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: const [
-                      Positioned(
-                        top: 60,
-                        right: 10,
-                        child: Image(
-                          image: AssetImage('assets/hello.png'),
-                          height: 215,
+                  flexibleSpace: SizedBox(
+                    height: 0,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: const [
+                        Positioned(
+                          top: 60,
+                          right: 10,
+                          child: Image(
+                            image: AssetImage('assets/hello.png'),
+                            height: 215,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
                   title: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                    Text(
-                      'Hello, ${profileManager.name}',
-                    ),
-                    Text(
-                      profileManager.isBirthDay
-                          ? 'Happy birhtday from moodl!'
-                          : 'Nice to see you again!',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
-                    ),
-                  ])),
+                        Text(
+                          'Hello, ${profileManager.name}',
+                        ),
+                        Text(
+                          profileManager.isBirthDay
+                              ? 'Happy birhtday from moodl!'
+                              : 'Nice to see you again!',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400, fontSize: 18),
+                        ),
+                      ])),
               const Spacer(),
               Container(
                 color: const Color.fromARGB(25, 244, 119, 24),

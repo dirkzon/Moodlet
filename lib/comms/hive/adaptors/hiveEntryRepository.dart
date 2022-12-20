@@ -21,11 +21,11 @@ class HiveEntryRepository with ChangeNotifier {
   update(SensorManager manager) {
     if (manager.recording.sessions.isNotEmpty) {
       _saveRecording(manager.recording);
-      manager.recording.sessions = [];
     }
   }
 
   _saveRecording(Recording rec) {
+    debugPrint('saving entries');
     for (Session session in rec.sessions) {
       for (var i = 0; i < session.entries.length; i++) {
         if (session.valid) {

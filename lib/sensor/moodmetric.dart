@@ -30,7 +30,7 @@ class Moodmetric {
   late BluetoothCharacteristic comboCharacteristic;
   late BluetoothCharacteristic dateTimeCharacteristic;
   late BluetoothCharacteristic batteryLevelCharacteristic;
-  static const debug = true;
+  static const debug = false;
 
   Moodmetric(List<BluetoothCharacteristic> chars, this.id, this.name,
       this.peripheral) {
@@ -57,13 +57,14 @@ class Moodmetric {
   }
 
   setReferenceTime() async {
-    int timeInMillis = DateTime.now().millisecondsSinceEpoch;
+    int timeInMillis = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     var timeArr = [
-      (((timeInMillis >> 24).toInt() & 255)),
-      (((timeInMillis >> 16).toInt() & 255)),
-      (((timeInMillis >> 8).toInt() & 255)),
-      ((timeInMillis & 255).toInt())
+      ((timeInMillis >> 24).toInt() & 255),
+      ((timeInMillis >> 16).toInt() & 255),
+      ((timeInMillis >> 8).toInt() & 255),
+      (timeInMillis & 255).toInt(),
     ];
+
     await dateTimeCharacteristic.write(timeArr);
   }
 

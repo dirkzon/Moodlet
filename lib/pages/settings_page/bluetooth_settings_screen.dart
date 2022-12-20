@@ -91,12 +91,21 @@ class BleutoothSettingsScreen extends StatelessWidget {
                           style: ButtonStyle(
                               padding: MaterialStateProperty.all(
                                   const EdgeInsets.all(0.0))),
-                          onPressed: () =>
-                              bluetoothProvider.connect(device.device.id),
+                          onPressed: () async {
+                            await bluetoothProvider.connect(device.device.id);
+                            await sensorProvidor.downloadData();
+                          },
                           child: const Text('connect'),
                         ),
                       );
-                    })))
+                    }))),
+            Container(
+              margin: const EdgeInsets.all(24.0),
+              child: ElevatedButton(
+                onPressed: () => sensorProvidor.downloadData(),
+                child: const Text('Test'),
+              ),
+            ),
           ],
         ));
   }

@@ -25,16 +25,17 @@ class Session {
     }
 
     int epoch = (((((bArr[5] & 255) << 0x10) |
-                    ((bArr[6] & 255) << 8) |
-                    (bArr[7] & 255)) *
-                60) +
+                        ((bArr[6] & 255) << 8) |
+                        (bArr[7] & 255)) *
+                    60)
+                .toInt() +
             (((bArr[1] & 255) << 0x18) |
-                ((bArr[2] & 255) << 0x10) |
-                ((bArr[3] & 255) << 8) |
-                (bArr[4] & 255))) *
+                    ((bArr[2] & 255) << 0x10) |
+                    ((bArr[3] & 255) << 8) |
+                    (bArr[4] & 255))
+                .toInt()) *
         1000;
 
-    return Session(
-        DateTime.fromMicrosecondsSinceEpoch(epoch * 1000), valid, entries);
+    return Session(DateTime.fromMillisecondsSinceEpoch(epoch), valid, entries);
   }
 }
