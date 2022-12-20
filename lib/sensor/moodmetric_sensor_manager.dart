@@ -52,15 +52,16 @@ class SensorManager with ChangeNotifier {
     if (connected) {
       if (!downloading) {
         debugPrint('downloading data from ring');
-        downloading = false;
+        downloading = true;
         int startAddress = 0;
 
         progress = 0;
         int endAddress = await sensor.getFlashState();
-        await sensor.setCommandModeReading(startAddress);
         print(endAddress);
         print('before');
         if (endAddress > 0) {
+          await sensor.setCommandModeReading(startAddress);
+
           while (startAddress < endAddress) {
             startAddress = await sensor.readMmData(startAddress);
             _setProgress(startAddress, endAddress);
@@ -73,10 +74,10 @@ class SensorManager with ChangeNotifier {
           if (recording.sessions.isNotEmpty) {
             await sensor.removeFlash();
           }
-          downloading = false;
           notifyListeners();
-          debugPrint('finished downloading');
         }
+        debugPrint('finished downloading');
+        downloading = false;
       } else {
         debugPrint('already downloading');
       }

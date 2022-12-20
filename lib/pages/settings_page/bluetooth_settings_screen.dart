@@ -99,13 +99,6 @@ class BleutoothSettingsScreen extends StatelessWidget {
                         ),
                       );
                     }))),
-            Container(
-              margin: const EdgeInsets.all(24.0),
-              child: ElevatedButton(
-                onPressed: () => sensorProvidor.downloadData(),
-                child: const Text('Test'),
-              ),
-            ),
           ],
         ));
   }

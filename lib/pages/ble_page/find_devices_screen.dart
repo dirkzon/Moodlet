@@ -83,7 +83,7 @@ class _FindDevicesPageState extends State<FindDevicesScreen> {
           if (sensorProvidor.connected)
             Expanded(
                 child: IconButton(
-                    onPressed: () async => sensorProvidor.downloadData(),
+                    onPressed: () async => await sensorProvidor.downloadData(),
                     icon: const Icon(Icons.download))),
           LinearProgressIndicator(
             value: sensorProvidor.progress,
