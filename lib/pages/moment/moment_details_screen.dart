@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:bletest/comms/hive/models/hiveMoment.dart';
@@ -31,6 +30,34 @@ class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
     @override
     void initState() {
       super.initState();
+    }
+
+    Widget _buildDeleteDialog(BuildContext buildContext) {
+      return new AlertDialog(
+        title: Text("Are you sure?"),
+        content: Text("Are you sure you want to delete this moment?"),
+        actions: [
+          TextButton(
+            child: Text("CANCEL"),
+            onPressed: () => Navigator.pop(buildContext),
+            style: TextButton.styleFrom(
+                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                alignment: Alignment.centerLeft),
+          ),
+          TextButton(
+            child: Text("I'M SURE"),
+            onPressed: () {
+              momentRepo.deleteMoment(widget.momentId);
+              Navigator.of(buildContext).popUntil((route) => route.isFirst);
+            },
+            style: TextButton.styleFrom(
+                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                alignment: Alignment.centerLeft),
+          ),
+        ],
+      );
     }
 
     return Scaffold(
@@ -67,12 +94,13 @@ class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
           ),
           backgroundColor: Colors.transparent,
           actions: [
-            TextButton(
-                onPressed: () {},
-                child: Text(
-                  "Edit",
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12),
-                ))
+            IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
+            IconButton(
+                onPressed: () => showDialog(
+                    context: context,
+                    builder: (BuildContext context) =>
+                        _buildDeleteDialog(context)),
+                icon: Icon(Icons.delete))
           ],
         ),
         body: CustomScrollView(slivers: [

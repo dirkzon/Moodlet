@@ -103,6 +103,8 @@ class _JournalScreenState extends State<JournalScreen> {
     List<HiveMoment> moments = repository.getMoments(start, end);
 
     updateMoments() {
+      // By calling this function, the state is manipulated into thinking a variable has been changed, and will then proceed to
+      // reload the UI, also reloading the list of moments.
       _setDay(start.day);
     }
 
