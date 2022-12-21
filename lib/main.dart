@@ -1,3 +1,4 @@
+import 'package:bletest/comms/hive/adaptors/HiveBleDeviceRepository.dart';
 import 'package:bletest/comms/hive/adaptors/hiveEntryRepository.dart';
 import 'package:bletest/comms/hive/adaptors/hiveProfileRepository.dart';
 import 'package:bletest/comms/hive/adaptors/settingsRepository.dart';
@@ -35,7 +36,7 @@ class MoodlApp extends StatelessWidget {
             create: (context) => MomentManager(),
           ),
           ChangeNotifierProvider<BluetoothManager>(
-            create: (context) => BluetoothManager(),
+            create: (context) => BluetoothManager(HiveBleDeviceRepository()),
           ),
           ChangeNotifierProvider<HiveEntryRepository>(
               create: (_) => HiveEntryRepository()),
@@ -51,10 +52,19 @@ class MoodlApp extends StatelessWidget {
           ),
           ChangeNotifierProxyProvider<SensorManager, HiveEntryRepository>(
             create: (_) => HiveEntryRepository(),
-            update: ((_, sensor, port) {
-              port!.update(sensor);
+            update: ((_, sensor, repo) {
+              repo!.update(sensor);
               sensor.clearRecording();
-              return port;
+              return repo;
+            }),
+          ),
+          ChangeNotifierProxyProvider<SensorManager, HiveBleDeviceRepository>(
+            create: (_) => HiveBleDeviceRepository(),
+            update: ((_, sensor, repo) {
+              if (sensor.connected) {
+                repo!.update(sensor);
+              }
+              return repo!;
             }),
           ),
           ChangeNotifierProxyProvider<SettingsManager, NotificationManager>(
@@ -84,7 +94,7 @@ class MoodlApp extends StatelessWidget {
               SensorManager manager = Provider.of(context);
               final cron = Cron();
               //every 30 minutes
-              cron.schedule(Schedule.parse('*/15 * * * *'), () async {
+              cron.schedule(Schedule.parse('*/5 * * * *'), () async {
                 await manager.downloadData();
               });
               // must initialize notifications
@@ -94,6 +104,8 @@ class MoodlApp extends StatelessWidget {
                   Provider.of<HiveSettingsRepository>(context);
               HiveProfileRepository profile =
                   Provider.of<HiveProfileRepository>(context);
+              HiveBleDeviceRepository devices =
+                  Provider.of<HiveBleDeviceRepository>(context);
 
               return MaterialApp(
                   title: 'Moodl',

@@ -1,35 +1,32 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'hiveProfile.dart';
+part of 'hiveBleDevice.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class HiveProfileAdapter extends TypeAdapter<HiveProfile> {
+class HiveBleDeviceAdapter extends TypeAdapter<HiveBleDevice> {
   @override
-  final int typeId = 5;
+  final int typeId = 6;
 
   @override
-  HiveProfile read(BinaryReader reader) {
+  HiveBleDevice read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return HiveProfile(
-      birthDay: fields[0] as DateTime,
-      name: fields[1] == null ? '' : fields[1] as String,
+    return HiveBleDevice(
+      id: fields[0] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, HiveProfile obj) {
+  void write(BinaryWriter writer, HiveBleDevice obj) {
     writer
-      ..writeByte(2)
-      ..writeByte(0)
-      ..write(obj.birthDay)
       ..writeByte(1)
-      ..write(obj.name);
+      ..writeByte(0)
+      ..write(obj.id);
   }
 
   @override
@@ -38,7 +35,7 @@ class HiveProfileAdapter extends TypeAdapter<HiveProfile> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is HiveProfileAdapter &&
+      other is HiveBleDeviceAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

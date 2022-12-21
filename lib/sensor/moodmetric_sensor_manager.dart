@@ -57,8 +57,6 @@ class SensorManager with ChangeNotifier {
 
         progress = 0;
         int endAddress = await sensor.getFlashState();
-        print(endAddress);
-        print('before');
         if (endAddress > 0) {
           await sensor.setCommandModeReading(startAddress);
 

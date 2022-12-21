@@ -1,3 +1,4 @@
+import 'package:bletest/comms/hive/adaptors/HiveBleDeviceRepository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
@@ -11,6 +12,28 @@ class BluetoothManager with ChangeNotifier {
   List<MoodmetricDevice> availableDevices = [];
 
   FlutterBlue flutterBlue = FlutterBlue.instance;
+
+  BluetoothManager(HiveBleDeviceRepository repo) {
+    _connectLinkedDevices(repo.getLinkedDevices().map((e) => e.id).toList());
+  }
+
+  _connectLinkedDevices(List ids) async {
+    debugPrint('trying to connect to linked device');
+    isScanning = true;
+    List<ScanResult> results =
+        await flutterBlue.startScan(timeout: const Duration(seconds: 4));
+    for (ScanResult r in results) {
+      if (r.advertisementData.serviceUuids.contains(uuidMoodmetricService)) {
+        if (ids.contains(r.device.id.toString())) {
+          availableDevices.add(MoodmetricDevice(r.device));
+          connect(r.device.id);
+          isScanning = false;
+          break;
+        }
+      }
+    }
+    isScanning = false;
+  }
 
   scan() async {
     if (isScanning) {
@@ -40,6 +63,7 @@ class BluetoothManager with ChangeNotifier {
   }
 
   connect(id) async {
+    debugPrint('connecting to device with id:"$id"');
     var device =
         availableDevices.where(((device) => device.device.id == id)).first;
     await device.device.connect();
@@ -48,6 +72,7 @@ class BluetoothManager with ChangeNotifier {
   }
 
   disconnect() async {
+    debugPrint('disconnecting from device');
     var device = availableDevices.where(((device) => device.connected)).first;
     await device.device.disconnect();
     device.connected = false;
