@@ -1,8 +1,10 @@
+import 'package:bletest/comms/hive/models/hiveMoment.dart';
 import 'package:flutter/material.dart';
 import 'package:bletest/moment/moment_categories.dart';
 import 'momentEnums.dart';
 
 class MomentManager with ChangeNotifier {
+  String id = "";
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now().add(const Duration(hours: 1));
   String name = "";
@@ -12,6 +14,11 @@ class MomentManager with ChangeNotifier {
   Arousal arousal = Arousal.neutral;
   Dominance dominance = Dominance.neutral;
   String additionalNotes = "";
+
+  setId(String id) {
+    id = id;
+    notifyListeners();
+  }
 
   setStartDate(DateTime value) {
     startDate = value;
@@ -41,6 +48,20 @@ class MomentManager with ChangeNotifier {
     return categoryNames;
   }
 
+  retrieveCategories(List<String> categoryNames) {
+    List<MomentCategory> categories = [];
+
+    categoryNames.forEach((e) {
+      momentCategories.forEach((element) {
+        if (element.name == e) {
+          categories.add(element);
+        }
+      });
+    });
+
+    return categories;
+  }
+
   setCategories(List<MomentCategory> value) {
     categories = value;
     notifyListeners();
@@ -67,6 +88,7 @@ class MomentManager with ChangeNotifier {
   }
 
   clearMoment() {
+    id = "";
     startDate = DateTime.now();
     endDate = DateTime.now().add(const Duration(hours: 1));
     name = "";
@@ -76,6 +98,19 @@ class MomentManager with ChangeNotifier {
     arousal = Arousal.neutral;
     dominance = Dominance.neutral;
     additionalNotes = "";
+  }
+
+  retrieveMoment(HiveMoment moment) {
+    id = moment.key;
+    startDate = moment.startDate;
+    endDate = moment.endDate;
+    name = moment.name;
+    location = moment.location;
+    categories = retrieveCategories(moment.categories);
+    pleasure = Pleasure.values[moment.pleasure];
+    arousal = Arousal.values[moment.arousal];
+    dominance = Dominance.values[moment.dominance];
+    additionalNotes = moment.additionalNotes;
   }
 
   bool isValid() {

@@ -293,6 +293,7 @@ class _AddMomentScreenState extends State<AddMomentScreen> {
               margin: const EdgeInsets.all(24.0),
               child: ElevatedButton(
                 onPressed: () => {
+                  debugPrint('moment id' + manager.id),
                   Navigator.push(
                       context,
                       MaterialPageRoute(

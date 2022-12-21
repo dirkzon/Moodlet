@@ -23,7 +23,13 @@ class HiveMomentRepository with ChangeNotifier {
   }
 
   saveMoment(HiveMoment moment) {
-    box.put(const Uuid().v4(), moment);
+    String id = const Uuid().v4();
+    // box.put(id, moment);
+    box.put(id, moment);
+  }
+
+  updateMoment(String id, HiveMoment moment) {
+    box.put(id, moment);
   }
 
   deleteMoment(String id) {

@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:bletest/comms/hive/models/hiveMoment.dart';
 import 'package:bletest/moment/momentEnums.dart';
+import 'package:bletest/pages/moment/add_moment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,7 @@ import 'package:provider/provider.dart';
 import '../../comms/hive/adaptors/hiveEntryRepository.dart';
 import '../../comms/hive/adaptors/hiveMomentRepository.dart';
 import '../../moment/moment_categories.dart';
+import '../../moment/moment_manager.dart';
 
 class MomentDetailsScreen extends StatefulWidget {
   var momentId;
@@ -24,6 +26,8 @@ class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
   Widget build(BuildContext context) {
     HiveMomentRepository momentRepo =
         Provider.of<HiveMomentRepository>(context);
+
+    MomentManager manager = Provider.of<MomentManager>(context);
 
     var moment = momentRepo.getMoment(widget.momentId);
 
@@ -94,7 +98,17 @@ class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
           ),
           backgroundColor: Colors.transparent,
           actions: [
-            IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
+            IconButton(
+                onPressed: () {
+                  manager.retrieveMoment(moment);
+
+                  Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: ((context) => const AddMomentScreen())))
+                      .then((_) => manager.clearMoment());
+                },
+                icon: Icon(Icons.edit)),
             IconButton(
                 onPressed: () => showDialog(
                     context: context,
