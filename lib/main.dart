@@ -1,3 +1,4 @@
+import 'package:bletest/comms/hive/adaptors/HiveBleDeviceRepository.dart';
 import 'package:bletest/comms/hive/adaptors/hiveEntryRepository.dart';
 import 'package:bletest/comms/hive/adaptors/hiveProfileRepository.dart';
 import 'package:bletest/comms/hive/adaptors/settingsRepository.dart';
@@ -35,7 +36,7 @@ class MoodlApp extends StatelessWidget {
             create: (context) => MomentManager(),
           ),
           ChangeNotifierProvider<BluetoothManager>(
-            create: (context) => BluetoothManager(),
+            create: (context) => BluetoothManager(HiveBleDeviceRepository()),
           ),
           ChangeNotifierProvider<HiveEntryRepository>(
               create: (_) => HiveEntryRepository()),
@@ -51,10 +52,18 @@ class MoodlApp extends StatelessWidget {
           ),
           ChangeNotifierProxyProvider<SensorManager, HiveEntryRepository>(
             create: (_) => HiveEntryRepository(),
-            update: ((_, sensor, port) {
-              port!.update(sensor);
+            update: ((_, sensor, repo) {
+              repo!.update(sensor);
               sensor.clearRecording();
-              return port;
+              return repo;
+            }),
+          ),
+          ChangeNotifierProxyProvider<BluetoothManager,
+              HiveBleDeviceRepository>(
+            create: (_) => HiveBleDeviceRepository(),
+            update: ((_, manager, repo) {
+              repo!.update(manager);
+              return repo;
             }),
           ),
           ChangeNotifierProxyProvider<SettingsManager, NotificationManager>(

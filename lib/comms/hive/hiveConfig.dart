@@ -1,3 +1,4 @@
+import 'package:bletest/comms/hive/models/hiveBleDevice.dart';
 import 'package:bletest/comms/hive/models/hiveDesignSettings.dart';
 import 'package:bletest/comms/hive/models/hiveNotificationSettings.dart';
 import 'package:bletest/comms/hive/models/hiveProfile.dart';
@@ -65,6 +66,17 @@ class HiveConfig {
         await Hive.deleteBoxFromDisk("moments");
       }
       await Hive.openBox<HiveMoment>("moments");
+    }
+
+    //devices
+    Hive.registerAdapter(HiveBleDeviceAdapter());
+    try {
+      await Hive.openBox<HiveBleDevice>("bleDevices");
+    } catch (e) {
+      if (await Hive.boxExists("bleDevices")) {
+        await Hive.deleteBoxFromDisk("bleDevices");
+      }
+      await Hive.openBox<HiveBleDevice>("bleDevices");
     }
   }
 }

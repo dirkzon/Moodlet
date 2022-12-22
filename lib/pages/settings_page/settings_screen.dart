@@ -30,7 +30,7 @@ class _SettingsState extends State<SettingsScreen> {
                     context,
                     MaterialPageRoute(
                         builder: ((context) =>
-                            const BleutoothSettingsScreen()))),
+                            const BluetoothSettingsScreen()))),
                 child: Row(
                   children: const [Text('Bluetooth'), Spacer(), Text('>')],
                 )),
