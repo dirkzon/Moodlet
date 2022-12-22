@@ -1,9 +1,11 @@
 import 'dart:math';
 
+import 'package:bletest/ble/bluetooth_manager.dart';
 import 'package:bletest/comms/hive/models/hiveBleDevice.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 
+import '../../../ble/moodmetricDevice.dart';
 import '../../../sensor/moodmetric_sensor_manager.dart';
 
 class HiveBleDeviceRepository with ChangeNotifier {
@@ -18,16 +20,44 @@ class HiveBleDeviceRepository with ChangeNotifier {
     return devices.isNotEmpty;
   }
 
-  update(SensorManager manager) {
-    if (!_isSaved(manager.sensor.id.toString())) {
-      debugPrint('saving device with id: "${manager.sensor.id}"');
-      saveDevice(HiveBleDevice(id: manager.sensor.id.toString()));
-    } else {
-      debugPrint('device with id: "${manager.sensor.id}" already saved');
+  bool _ifAutoConnectIsChanged(String id, bool value) {
+    var device = box.values.firstWhere((d) => d.id == id);
+    return device.autoConnect != value;
+  }
+
+  update(BluetoothManager manager) {
+    for (var device in manager.linkedDevices) {
+      if (!_isSaved(device.id)) {
+        saveDevice(HiveBleDevice(
+            id: device.id.toString(),
+            name: device.name,
+            autoConnect: device.autoConnect));
+      } else if (_ifAutoConnectIsChanged(device.id, device.autoConnect)) {
+        updateDevice(HiveBleDevice(
+            id: device.id.toString(),
+            name: device.name,
+            autoConnect: device.autoConnect));
+      }
+    }
+    for (var linkedDevice in box.values) {
+      if (!manager.linkedDevices.map((d) => d.id).contains(linkedDevice.id)) {
+        removeDevice(linkedDevice.id);
+      }
     }
   }
 
+  updateDevice(HiveBleDevice device) {
+    debugPrint('updating device with id: "${device.id}"');
+    box.put(device.id, device);
+  }
+
   saveDevice(HiveBleDevice device) {
-    box.add(device);
+    debugPrint('saving device with id: "${device.id}"');
+    box.put(device.id, device);
+  }
+
+  removeDevice(String id) {
+    debugPrint('removing device with id: "$id"');
+    box.delete(id);
   }
 }
