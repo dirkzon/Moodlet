@@ -102,6 +102,12 @@ class _JournalScreenState extends State<JournalScreen> {
 
     List<HiveMoment> moments = repository.getMoments(start, end);
 
+    updateMoments() {
+      // By calling this function, the state is manipulated into thinking a variable has been changed, and will then proceed to
+      // reload the UI, also reloading the list of moments.
+      _setDay(start.day);
+    }
+
     return Scaffold(
         body: CustomScrollView(slivers: [
       SliverFillRemaining(
@@ -157,102 +163,110 @@ class _JournalScreenState extends State<JournalScreen> {
                         height: 85,
                         margin: const EdgeInsets.symmetric(
                             vertical: 0, horizontal: 24.0),
-                        child: Card(
-                            child: Row(children: [
-                          Container(
-                            margin: const EdgeInsets.only(right: 12, left: 12),
-                            child:
-                                Row(mainAxisSize: MainAxisSize.min, children: [
-                              //Time element
-                              SizedBox(
-                                width: 40,
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                          DateFormat('HH:mm')
-                                              .format(e.startDate),
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 12,
-                                              color: Colors.grey)),
-                                      Text("-",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 12,
-                                              color: Colors.grey)),
-                                      Text(
-                                          DateFormat('HH:mm').format(e.endDate),
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 12,
-                                              color: Colors.grey)),
-                                    ]),
-                              ),
-
-                              // Moodle
-                              Container(
-                                height: 50,
-                                width: 50,
-                                margin: EdgeInsets.only(left: 12),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                        width: 3,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary)),
-                                child: Icon(Icons.close),
-                              ),
-                            ]),
-                          ),
-
-                          // Title and location
-                          Expanded(
-                            child: Container(
-                              // width: 180,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    e.name,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14),
-                                    maxLines: 1,
-                                    softWrap: false,
-                                    overflow: TextOverflow.fade,
-                                  ),
-                                  Text(
-                                    e.location,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 12,
-                                        color: Colors.grey),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-
-                          // Spacer(),
-
-                          //Details button
-                          IconButton(
-                              icon: Icon(Icons.keyboard_arrow_right_outlined),
-                              iconSize: 35,
-                              color: Colors.grey,
-                              onPressed: () {
-                                Navigator.push(
+                        child: GestureDetector(
+                            onTap: () => Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: ((context) =>
                                             MomentDetailsScreen(
                                               momentId: e.key,
-                                            ))));
-                              }),
-                        ]))))
+                                            )))).then((_) {
+                                  updateMoments();
+                                }),
+                            child: Card(
+                                child: Row(children: [
+                              Container(
+                                margin:
+                                    const EdgeInsets.only(right: 12, left: 12),
+                                child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      //Time element
+                                      SizedBox(
+                                        width: 40,
+                                        child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                  DateFormat('HH:mm')
+                                                      .format(e.startDate),
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 12,
+                                                      color: Colors.grey)),
+                                              Text("-",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 12,
+                                                      color: Colors.grey)),
+                                              Text(
+                                                  DateFormat('HH:mm')
+                                                      .format(e.endDate),
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 12,
+                                                      color: Colors.grey)),
+                                            ]),
+                                      ),
+
+                                      // Moodle
+                                      Container(
+                                        height: 50,
+                                        width: 50,
+                                        margin: EdgeInsets.only(left: 12),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            border: Border.all(
+                                                width: 3,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary)),
+                                        child: Icon(Icons.close),
+                                      ),
+                                    ]),
+                              ),
+
+                              // Title and location
+                              Expanded(
+                                child: Container(
+                                  // width: 180,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        e.name,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14),
+                                        maxLines: 1,
+                                        softWrap: false,
+                                        overflow: TextOverflow.fade,
+                                      ),
+                                      Text(
+                                        e.location,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 12,
+                                            color: Colors.grey),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+                              // Spacer(),
+
+                              //Details button
+                              Icon(Icons.keyboard_arrow_right_outlined,
+                                  color: Colors.grey, size: 35)
+                            ])))))
                     .toList(),
               ),
               Container(
@@ -264,7 +278,10 @@ class _JournalScreenState extends State<JournalScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: ((context) => const AddMomentScreen())));
+                              builder: ((context) =>
+                                  const AddMomentScreen()))).then((_) {
+                        updateMoments();
+                      });
                     },
                     child: Row(
                       children: const [
