@@ -1,25 +1,26 @@
-# Prototype Stress measurement app
+# Data-driven (Stress) Coaching For People With Autism
 
-This repository hold the code for the Moodl app. Moodl is an arousal measurement app focussed on people with A.S.D. 
-The goal of the app is to give people with A.S.D. a better insight into their stress, both good and bad.
+This repository holds the code for the Coaching app. Before cloning it, contact [Garde-Perik,Evelien E.M. van de](e.vandegarde@fontys.nl) for more information. Moodl (Coaching app for people with Autism) is an app that measures the arousal of a person using the MoodMetric ring to this moment. The goal of the app is to give people with Autism spectrum disorder a better insight into their arousal, which can be negative and positive.
 
-## Packages
-- The app is built with [Flutter](https://flutter.dev/)
-- The bluetooth connection is handeled by [FlutterBlue](https://pub.dev/packages/flutter_blue)
+## Required Packages And Hardware
 
-## Installation
-First clone this repositry.
+The app is built using [Flutter](https://flutter.dev/) and the Bluetooth connection is handeled by [FlutterBlue](https://pub.dev/packages/flutter_blue), therefore they are required before running the app.
 
+Hardware requirements include a USB-A to Micro USB to charge the ring and the [Moodmetric ring](https://moodmetric.com/services/moodmetric-smart-ring/), a phone (running min. Android ) and a cable to connect the phone to the computer.
+
+
+## Setup
+- First clone this repositry:
 `git clone https://github.com/dirkzon/Moodl.git`
 
-Then [Install Flutter](https://docs.flutter.dev/get-started/install) by following the guide on their website.
+- Install [Flutter](https://docs.flutter.dev/get-started/install) by following the guideline on their website.
 
-Intall the dependencies.
-
+- Intall the dependencies (includes FlutterBlue).
 `flutter pub get`
 
-turn on USB-debugging in the developer settings on your phone
+- Turn on USB-debugging in the developer settings on your phone 
 
-Run the app
-
+- Run the app
 `flutter run lib/main.dart`
+
+- There you go... It works, hopefully.
