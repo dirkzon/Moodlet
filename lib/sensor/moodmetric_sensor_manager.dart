@@ -69,13 +69,21 @@ class SensorManager with ChangeNotifier {
           recording = await sensor.decodeBuffer();
           recording.aA = combo.aA;
           await sensor.setReferenceTime();
+          debugPrint('finished downloading');
+          downloading = false;
           if (recording.sessions.isNotEmpty) {
-            await sensor.removeFlash();
+            var hasValidSessions =
+                recording.sessions.map((s) => s.valid).contains(true);
+            if (hasValidSessions) {
+              await sensor.removeFlash();
+              notifyListeners();
+            } else {
+              debugPrint('recording has no valid sessions');
+            }
+          } else {
+            debugPrint('recording contains no sessions');
           }
-          notifyListeners();
         }
-        debugPrint('finished downloading');
-        downloading = false;
       } else {
         debugPrint('already downloading');
       }

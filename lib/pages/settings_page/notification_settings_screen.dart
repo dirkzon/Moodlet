@@ -63,7 +63,7 @@ class NotificationSettingsScreen extends StatelessWidget {
                       child: Row(
                         children: [
                           const Text(
-                            "Journal",
+                            "Reflection",
                             style: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 16,

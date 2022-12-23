@@ -1,12 +1,7 @@
-import 'dart:math';
-
 import 'package:bletest/ble/bluetooth_manager.dart';
 import 'package:bletest/comms/hive/models/hiveBleDevice.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
-
-import '../../../ble/moodmetricDevice.dart';
-import '../../../sensor/moodmetric_sensor_manager.dart';
 
 class HiveBleDeviceRepository with ChangeNotifier {
   Box<HiveBleDevice> box = Hive.box<HiveBleDevice>("bleDevices");
