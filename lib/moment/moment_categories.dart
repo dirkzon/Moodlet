@@ -10,10 +10,15 @@ class MomentCategory {
 }
 
 final List<MomentCategory> momentCategories = [
-  MomentCategory(
-      name: 'Sports',
-      icon: Icons.fitness_center,
-      keywords: ["sports", "practice", "excercise", "football", "soccer"]),
+  MomentCategory(name: 'Sports', icon: Icons.fitness_center, keywords: [
+    "sports",
+    "practice",
+    "excercise",
+    "football",
+    "soccer",
+    "basketball",
+    "hockey"
+  ]),
   MomentCategory(name: 'Commute', icon: Icons.commute, keywords: [
     "commute",
     "travel",
@@ -38,5 +43,21 @@ final List<MomentCategory> momentCategories = [
     "social",
     "media",
     "electronics"
+  ]),
+  MomentCategory(name: 'School', icon: Icons.school, keywords: [
+    "school",
+    "education",
+    "work",
+    "lessons",
+    "homework",
+    "practice",
+  ]),
+  MomentCategory(name: 'Work', icon: Icons.work_outline, keywords: [
+    "work",
+    "job",
+    "business",
+    "office",
+    "career",
+    "profession",
   ]),
 ];

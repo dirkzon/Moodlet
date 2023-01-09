@@ -22,6 +22,29 @@ class MomentDetailsScreen extends StatefulWidget {
 }
 
 class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
+  _calculateMoodl(HiveMoment moment) {
+    switch (moment.pleasure) {
+      case 0:
+        return Icons.sentiment_very_dissatisfied;
+      case 1:
+        return Icons.sentiment_dissatisfied;
+      case 2:
+        return Icons.sentiment_neutral;
+      case 3:
+        print("yes");
+        return Icons.sentiment_satisfied;
+      case 4:
+        return Icons.sentiment_very_satisfied;
+      default:
+        return Icons.close;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     HiveMomentRepository momentRepo =
@@ -30,11 +53,6 @@ class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
     MomentManager manager = Provider.of<MomentManager>(context);
 
     var moment = momentRepo.getMoment(widget.momentId);
-
-    @override
-    void initState() {
-      super.initState();
-    }
 
     Widget _buildDeleteDialog(BuildContext buildContext) {
       return new AlertDialog(
@@ -219,7 +237,7 @@ class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
                                   color:
                                       Theme.of(context).colorScheme.primary)),
                           child: Icon(
-                            Icons.close,
+                            _calculateMoodl(moment),
                             size: 55,
                           ),
                         ),
@@ -228,6 +246,7 @@ class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
                     ),
                   ),
                   Spacer(),
+
                   // Notes
                   Expanded(
                     flex: 40,
