@@ -32,6 +32,24 @@ class _JournalScreenState extends State<JournalScreen> {
 
   String momentText = 'Todays moments';
 
+  _calculateMoodl(HiveMoment moment) {
+    switch (moment.pleasure) {
+      case 0:
+        return Icons.sentiment_very_dissatisfied;
+      case 1:
+        return Icons.sentiment_dissatisfied;
+      case 2:
+        return Icons.sentiment_neutral;
+      case 3:
+        print("yes");
+        return Icons.sentiment_satisfied;
+      case 4:
+        return Icons.sentiment_very_satisfied;
+      default:
+        return Icons.close;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -226,7 +244,7 @@ class _JournalScreenState extends State<JournalScreen> {
                                                 color: Theme.of(context)
                                                     .colorScheme
                                                     .primary)),
-                                        child: Icon(Icons.close),
+                                        child: Icon(_calculateMoodl(e)),
                                       ),
                                     ]),
                               ),
