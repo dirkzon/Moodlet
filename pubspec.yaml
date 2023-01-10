@@ -45,7 +45,6 @@ dependencies:
   charts_flutter: ^0.12.0
   cron: ^0.5.1
   uuid: ^3.0.7
-  list_wheel_scroll_view_x: ^0.0.2
   flutter_local_notifications: ^12.0.4
 
 

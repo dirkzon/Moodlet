@@ -347,13 +347,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-  list_wheel_scroll_view_x:
-    dependency: "direct main"
-    description:
-      name: list_wheel_scroll_view_x
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.2"
   logging:
     dependency: transitive
     description:
