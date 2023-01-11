@@ -41,7 +41,6 @@ class _JournalScreenState extends State<JournalScreen> {
       case 2:
         return Icons.sentiment_neutral;
       case 3:
-        print("yes");
         return Icons.sentiment_satisfied;
       case 4:
         return Icons.sentiment_very_satisfied;
@@ -158,8 +157,8 @@ class _JournalScreenState extends State<JournalScreen> {
                       count: daysInMonth,
                       onChanged: (value) => _setDay(value!),
                     ),
-                    MoodChart(
-                        entry.getEntries(start, end), start, end, Colors.white),
+                    MoodChart(entry.getEntries(start, end), start, end,
+                        Colors.white, moments),
                   ],
                 ),
               ),

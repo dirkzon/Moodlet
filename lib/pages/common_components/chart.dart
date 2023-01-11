@@ -1,4 +1,5 @@
 import 'package:bletest/comms/hive/models/hiveEntry.dart';
+import 'package:bletest/comms/hive/models/hiveMoment.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:intl/intl.dart';
@@ -11,8 +12,10 @@ class MoodChart extends StatelessWidget {
   late DateTime end;
   Color background = Colors.transparent;
   bool singleDay = true;
+  List<HiveMoment> moments = [];
 
-  MoodChart(this.data, this.start, this.end, this.background, {super.key}) {
+  MoodChart(this.data, this.start, this.end, this.background, this.moments,
+      {super.key}) {
     duration = end.difference(start);
     singleDay = duration.inHours <= 24;
   }
@@ -44,6 +47,27 @@ class MoodChart extends StatelessWidget {
     }).toList();
   }
 
+  int _getPleasure(DateTime date) {
+    List momentList = [];
+    if (singleDay) {
+      momentList = moments
+          .where((moment) =>
+              moment.startDate.microsecondsSinceEpoch <
+                  date.microsecondsSinceEpoch &&
+              moment.endDate.microsecondsSinceEpoch >
+                  date.microsecondsSinceEpoch)
+          .toList();
+    } else {
+      momentList =
+          moments.where((moment) => moment.startDate.day == date.day).toList();
+    }
+    if (momentList.isNotEmpty) {
+      return momentList.map((m) => m.pleasure).reduce((a, b) => a + b) ~/
+          momentList.length;
+    }
+    return -1;
+  }
+
   List<charts.Series<HiveEntry, DateTime>> _getData() {
     return [
       charts.Series<HiveEntry, DateTime>(
@@ -51,8 +75,25 @@ class MoodChart extends StatelessWidget {
           measureFn: (entry, index) => entry.mm,
           domainFn: (entry, index) => entry.date,
           data: _changeDataResulution(data),
-          fillColorFn: (entry, index) =>
-              const charts.Color(r: 243, g: 139, b: 76)),
+          fillColorFn: (entry, index) {
+            _getPleasure(entry.date);
+            switch (_getPleasure(entry.date)) {
+              case -1:
+                return const charts.Color(r: 157, g: 157, b: 157);
+              case 0:
+                return const charts.Color(r: 255, g: 123, b: 84);
+              case 1:
+                return const charts.Color(r: 255, g: 178, b: 107);
+              case 2:
+                return const charts.Color(r: 255, g: 213, b: 111);
+              case 3:
+                return const charts.Color(r: 147, g: 155, b: 98);
+              case 4:
+                return const charts.Color(r: 171, g: 194, b: 112);
+              default:
+                return const charts.Color(r: 157, g: 157, b: 157);
+            }
+          }),
     ];
   }
 

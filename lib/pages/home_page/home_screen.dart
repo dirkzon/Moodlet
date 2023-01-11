@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 color: const Color.fromARGB(25, 244, 119, 24),
                 child: MoodChart(entry.getEntries(start, end), start, end,
-                    Colors.transparent),
+                    Colors.transparent, []),
               ),
 
               Container(
