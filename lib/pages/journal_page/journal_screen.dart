@@ -32,7 +32,7 @@ class _JournalScreenState extends State<JournalScreen> {
 
   String momentText = 'Todays moments';
 
-  _calculateMoodl(HiveMoment moment) {
+  _calculatePleasureLevel(HiveMoment moment) {
     switch (moment.pleasure) {
       case 0:
         return Icons.sentiment_very_dissatisfied;
@@ -230,7 +230,6 @@ class _JournalScreenState extends State<JournalScreen> {
                                             ]),
                                       ),
 
-                                      // Moodle
                                       Container(
                                         height: 50,
                                         width: 50,
@@ -243,7 +242,7 @@ class _JournalScreenState extends State<JournalScreen> {
                                                 color: Theme.of(context)
                                                     .colorScheme
                                                     .primary)),
-                                        child: Icon(_calculateMoodl(e)),
+                                        child: Icon(_calculatePleasureLevel(e)),
                                       ),
                                     ]),
                               ),

@@ -22,7 +22,7 @@ class MomentDetailsScreen extends StatefulWidget {
 }
 
 class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
-  _calculateMoodl(HiveMoment moment) {
+  _calculateMoodlet(HiveMoment moment) {
     switch (moment.pleasure) {
       case 0:
         return Icons.sentiment_very_dissatisfied;
@@ -188,7 +188,7 @@ class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
                           child: Column(
                             children: [
                               Text(
-                                "Moodl Level",
+                                "Moodlet Level",
                                 style: TextStyle(
                                     color: Colors.grey,
                                     fontWeight: FontWeight.w800,
@@ -225,7 +225,6 @@ class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
                         ),
                         Spacer(),
 
-                        // Moodl
                         Container(
                           height: 180,
                           width: 140,
@@ -237,7 +236,7 @@ class _MomentDetailsScreenState extends State<MomentDetailsScreen> {
                                   color:
                                       Theme.of(context).colorScheme.primary)),
                           child: Icon(
-                            _calculateMoodl(moment),
+                            _calculateMoodlet(moment),
                             size: 55,
                           ),
                         ),

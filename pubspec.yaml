@@ -56,7 +56,7 @@ dev_dependencies:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/icons/moodl.png"
+  image_path: "assets/icons/appicon.png"
 
 flutter_native_splash:
   color: "#fff6ef"
