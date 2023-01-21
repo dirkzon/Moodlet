@@ -105,7 +105,7 @@ class App extends StatelessWidget {
                   Provider.of<HiveProfileRepository>(context);
 
               return MaterialApp(
-                  title: 'Moodl',
+                  title: 'Moodlet',
                   navigatorKey: navigatorKey,
                   theme: ThemeConfig.config(settings),
                   home: const NavigationPage(

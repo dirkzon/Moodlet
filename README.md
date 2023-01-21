@@ -3,7 +3,9 @@
 [![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 </div>
 
-# Data-driven (Stress) Coaching For People With Autism
+# Moodlet | Data-driven (Stress) Coaching For People With Autism
+
+### **winners of the 2023 Sparc innovations award**
 
 This repository holds the code for the Coaching app. Before cloning it, contact [Garde-Perik,Evelien E.M. van de](mailto:e.vandegarde@fontys.nl) for more information. Moodlet (Coaching app for people with Autism) is an app that measures the arousal of a person using the MoodMetric ring to this moment. The goal of the app is to give people with Autism spectrum disorder a better insight into their arousal, which can be negative and positive. 
 

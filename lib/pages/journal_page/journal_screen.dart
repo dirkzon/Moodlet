@@ -132,7 +132,7 @@ class _JournalScreenState extends State<JournalScreen> {
           child: Column(
             children: [
               AppBar(
-                title: const Text('Moodl Journal'),
+                title: const Text('Moodlet Journal'),
                 backgroundColor: Colors.transparent,
               ),
               TimeFrameSelector(((value) => _setTimeFrame(value!))),
