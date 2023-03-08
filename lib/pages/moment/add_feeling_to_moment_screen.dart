@@ -99,7 +99,7 @@ class AddFeelingToMomentScreen extends StatelessWidget {
                           margin: EdgeInsets.only(bottom: 24),
                           child: Row(children: [
                             Text(
-                              'Pick a Moodl from each line',
+                              'Pick a Moodlet from each line',
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,

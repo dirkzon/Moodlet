@@ -67,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Text(
                           profileManager.isBirthDay
-                              ? 'Happy birhtday from moodl!'
+                              ? 'Happy birhtday from moodlet!'
                               : 'Nice to see you again!',
                           style: TextStyle(
                               fontWeight: FontWeight.w400, fontSize: 18),

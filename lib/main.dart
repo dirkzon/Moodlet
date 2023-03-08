@@ -19,12 +19,12 @@ import 'ble/bluetooth_manager.dart';
 
 void main() async {
   await HiveConfig.setUp();
-  runApp(MoodlApp());
+  runApp(App());
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-class MoodlApp extends StatelessWidget {
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext buildcontext) {
     return MultiProvider(
@@ -105,7 +105,7 @@ class MoodlApp extends StatelessWidget {
                   Provider.of<HiveProfileRepository>(context);
 
               return MaterialApp(
-                  title: 'Moodl',
+                  title: 'Moodlet',
                   navigatorKey: navigatorKey,
                   theme: ThemeConfig.config(settings),
                   home: const NavigationPage(

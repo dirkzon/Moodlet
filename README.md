@@ -3,9 +3,11 @@
 [![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 </div>
 
-# Data-driven (Stress) Coaching For People With Autism
+# Moodlet | Data-driven (Stress) Coaching For People With Autism
 
-This repository holds the code for the Coaching app. Before cloning it, contact [Garde-Perik,Evelien E.M. van de](mailto:e.vandegarde@fontys.nl) for more information. Moodl (Coaching app for people with Autism) is an app that measures the arousal of a person using the MoodMetric ring to this moment. The goal of the app is to give people with Autism spectrum disorder a better insight into their arousal, which can be negative and positive. 
+### **winners of the 2023 Sparc innovations award**
+
+This repository holds the code for the Coaching app. Before cloning it, contact [Garde-Perik,Evelien E.M. van de](mailto:e.vandegarde@fontys.nl) for more information. Moodlet (Coaching app for people with Autism) is an app that measures the arousal of a person using the MoodMetric ring to this moment. The goal of the app is to give people with Autism spectrum disorder a better insight into their arousal, which can be negative and positive. 
 
 During this project we collaberated with multiple groups within the A.S.S. project managed by Garde-Perik,Evelien E.M. van de. The Figma designs we used can be found [here](https://www.figma.com/proto/JiXk734r2YPBCTL1gH2DWt/S6-Designs?node-id=108%3A2953&scaling=scale-down&page-id=111%3A1154&starting-point-node-id=108%3A2953).
 
@@ -103,14 +105,14 @@ Of course the user will be able to set the reflection time to thier liking or tu
   <tr>
     <td height="412" width="200"><img align="right" src="https://user-images.githubusercontent.com/61184232/212048875-5be454a0-ea2d-4557-bf25-7c686ab5c6a2.jpg"></td>
     <td align="center">
-  The app also provides the user with a handful of customization options. The user can switch the app to dark mode for a better personal experience, but we also         recommend the user to tell us their name and birthday so that Moodl can call them by their name and congratulate them on their birthday.</td>
+  The app also provides the user with a handful of customization options. The user can switch the app to dark mode for a better personal experience, but we also         recommend the user to tell us their name and birthday so that Moodlet can call them by their name and congratulate them on their birthday.</td>
   </tr>
 </table>
 </details>
 
 ## Setup
 - First clone this repository:
-`git clone https://github.com/dirkzon/Moodl.git`
+`git clone https://github.com/dirkzon/Moodlet.git`
 
 - Install [Flutter](https://docs.flutter.dev/get-started/install) by following the guideline on their website.
 

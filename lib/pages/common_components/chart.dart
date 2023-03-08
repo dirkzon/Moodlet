@@ -152,7 +152,7 @@ class MoodChart extends StatelessWidget {
                   Row(
                     children: [
                       const Text(
-                        "Moodl levels",
+                        "Moodlet levels",
                         style: TextStyle(
                             fontWeight: FontWeight.w500, fontSize: 18),
                       ),
